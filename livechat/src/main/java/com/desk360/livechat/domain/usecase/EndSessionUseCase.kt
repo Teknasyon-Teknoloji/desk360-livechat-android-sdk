@@ -27,16 +27,6 @@ class EndSessionUseCase(
                         compositeDisposable.add(disposable)
                     }
             }
-        }?.doOnError {
-            LiveChatSharedPrefManager.clearSession()
-            conversationId?.let {
-                conversationRepository?.deleteAll()
-                    ?.subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe()?.let { disposable ->
-                        compositeDisposable.add(disposable)
-                    }
-            }
         }?.map { response ->
             return@map response.meta?.success
         }

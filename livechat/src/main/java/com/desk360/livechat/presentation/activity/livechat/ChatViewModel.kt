@@ -2,11 +2,6 @@ package com.desk360.livechat.presentation.activity.livechat
 
 import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.util.ChatUtils
 import com.desk360.livechat.data.HeaderChatScreenModel
@@ -19,6 +14,11 @@ import com.desk360.livechat.manager.LiveChatFirebaseHelper
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import java.io.File
 import java.util.*
 
@@ -326,8 +326,9 @@ class ChatViewModel : BaseViewModel() {
             onSuccess = { isSuccess ->
                 _isEndSessionSuccessful.value = isSuccess
             },
-            onError = {
-                _isEndSessionSuccessful.value = true
+            onError = { th ->
+                handleError(th)
+                _isEndSessionSuccessful.value = false
             }
         )
     }
