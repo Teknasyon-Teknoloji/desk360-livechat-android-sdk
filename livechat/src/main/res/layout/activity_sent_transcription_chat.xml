@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.SentTranscriptionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_company_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:model="@{viewModel.headerCompanyScreenModel}" />
+
+        <ImageView
+            android:id="@+id/image_view_tick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_tick"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/text_view_sent_transcription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gotham_medium"
+            tools:text="transcription_sent"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_tick" />
+
+        <TextView
+            android:id="@+id/text_view_sent_transcription_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center"
+            android:text="@{viewModel.language.transcriptDescription}"
+            android:textColor="@color/secondTextColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_sent_transcription"
+            app:layout_constraintStart_toStartOf="@+id/text_view_sent_transcription"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_sent_transcription"
+            tools:text="Thanks" />
+
+        <TextView
+            android:id="@+id/text_view_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_bg_button"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center"
+            android:text="@{viewModel.language.faqBack}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_sent_transcription_desc"
+            app:layout_constraintStart_toStartOf="@+id/text_view_sent_transcription_desc"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_sent_transcription_desc"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="Back" />
+
+        <TextView
+            android:id="@+id/text_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_bg_button"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center"
+            android:text="@{viewModel.language.faqBack}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_back"
+            app:layout_constraintStart_toStartOf="@+id/text_view_back"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_back"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="Back" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_by_desk360"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.desk360.livechat.data.HeaderChatScreenModel" />
+
+        <variable
+            name="isTyping"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        bind:background="@{model.titleBackgroundColor}"
+        tools:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/image_view_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@null"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_user_photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
+            bind:tint="@{model.titleColor}" />
+
+        <ImageView
+            android:id="@+id/image_view_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="30dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_three_dot"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_back"
+            bind:tint="@{model.titleColor}" />
+
+        <ImageView
+            android:id="@+id/image_view_user_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@null"
+            android:visibility="@{model.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_view_back"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:avatar="@{model.companyLogo}"
+            tools:src="@drawable/bg_avatar"
+            tools:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/image_view_avatar_bg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/bg_avatar"
+            android:visibility="@{!model.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_view_back"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:tint="@{model.titleColor}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gotham_medium"
+            android:text="@{model.initial}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="@{!model.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_avatar_bg"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_avatar_bg"
+            app:layout_constraintStart_toStartOf="@+id/image_view_avatar_bg"
+            app:layout_constraintTop_toTopOf="@+id/image_view_avatar_bg"
+            bind:textColor="@{model.titleBackgroundColor}"
+            tools:text="YC"
+            tools:textColor="@color/black"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_view_status_bg"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_user_photo"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_user_photo"
+            bind:tint="@{model.titleBackgroundColor}"
+            tools:background="@color/white"
+            tools:src="@drawable/ic_online" />
+
+        <ImageView
+            android:id="@+id/image_view_status"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_status_bg"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_status_bg"
+            app:layout_constraintStart_toStartOf="@+id/image_view_status_bg"
+            app:layout_constraintTop_toTopOf="@+id/image_view_status_bg"
+            tools:src="@drawable/ic_online" />
+
+        <TextView
+            android:id="@+id/text_view_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/gotham_medium"
+            android:text="@{model.title}"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/image_view_user_photo"
+            app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
+            bind:textColor="@{model.titleColor}"
+            tools:text="Yasin ÇETİN" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gotham_book"
+            android:gravity="top"
+            android:text="@{isTyping ? model.typingText : model.statusText}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/text_view_alias"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_alias"
+            bind:textColor="@{model.titleColor}"
+            tools:ignore="SmallSp"
+            tools:text="offline" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

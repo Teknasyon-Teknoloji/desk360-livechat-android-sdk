@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.SentMessageInfoViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_company_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:model="@{viewModel.headerCompanyScreenModel}" />
+
+        <ImageView
+            android:id="@+id/image_view_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_success_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/text_view_status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.language.offlineMessageSuccessTitle}"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_status"
+            tools:text="Message Sent" />
+
+        <TextView
+            android:id="@+id/text_view_status_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center"
+            android:text="@{viewModel.language.offlineMessageSuccessDescription}"
+            android:textColor="@color/secondTextColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_status_title"
+            tools:text="thank you we will contact you as soon as possible" />
+
+        <TextView
+            android:id="@+id/text_view_start_new_chat_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/ic_bg_button"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/gotham_medium"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_status_title"
+            app:layout_constraintStart_toStartOf="@+id/text_view_status_title"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_status_description"
+            bind:backgroundTint="@{viewModel.headerCompanyScreenModel.titleBackgroundColor}"
+            tools:backgroundTint="@color/colorPrimary"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+
+        <TextView
+            android:id="@+id/text_view_start_new_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.language.faqBack}"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_start_new_chat_bg"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_start_new_chat_bg"
+            app:layout_constraintStart_toStartOf="@+id/text_view_start_new_chat_bg"
+            app:layout_constraintTop_toTopOf="@+id/text_view_start_new_chat_bg"
+            bind:drawableTint="@{viewModel.headerCompanyScreenModel.titleColor}"
+            bind:textColor="@{viewModel.headerCompanyScreenModel.titleColor}"
+            tools:drawableTint="@color/white"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="Back"
+            tools:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/image_view_desk360"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_by_desk360"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

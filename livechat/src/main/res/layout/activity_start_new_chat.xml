@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.StartNewChatViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        bind:background="@{viewModel.screenModel.backgroundColor}"
+        tools:context="com.desk360.livechat.presentation.activity.livechat.StartNewChatActivity">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:model="@{viewModel.screenModel}" />
+
+        <View
+            android:id="@+id/view_top_banner"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            bind:background="@{viewModel.screenModel.backgroundHeaderColor}"
+            tools:background="@color/colorPrimary" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_start_new_chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/white"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_top_banner"
+            bind:visibility="@{viewModel.needNewToken}"
+            tools:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="25dp">
+
+                <TextView
+                    android:id="@+id/text_view_company_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gotham_medium"
+                    android:text="@{viewModel.screenModel.brandName}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:textColor="@{viewModel.screenModel.backgroundHeaderColor}"
+                    tools:text="brand_name" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/color_ecf0f4"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_new_chat_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/text_view_company_name" />
+
+                <TextView
+                    android:id="@+id/text_view_new_chat_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:text="@{viewModel.screenModel.sectionHeaderTitle}"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_company_name"
+                    bind:textColor="@{viewModel.screenModel.sectionHeaderTitleColor}"
+                    tools:text="section_header_title"
+                    tools:textColor="@color/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/text_view_start_new_chat_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gotham_medium"
+                    android:text="@{viewModel.screenModel.sectionHeaderText}"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_new_chat_title"
+                    bind:textColor="@{viewModel.screenModel.sectionHeaderTextColor}"
+                    tools:text="section_header_text"
+                    tools:textColor="@color/secondTextColor" />
+
+                <TextView
+                    android:id="@+id/text_view_start_new_chat_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_button"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/gotham_medium"
+                    app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_start_new_chat_desc"
+                    bind:backgroundTint="@{viewModel.screenModel.sendButtonBackgroundColor}"
+                    tools:backgroundTint="@color/black"
+                    tools:ignore="UseCompatTextViewDrawableXml"
+                    tools:targetApi="lollipop" />
+
+                <TextView
+                    android:id="@+id/text_view_start_new_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.screenModel.sendButtonText}"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/ic_send"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_start_new_chat_bg"
+                    app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
+                    app:layout_constraintTop_toTopOf="@+id/text_view_start_new_chat_bg"
+                    bind:drawableTint="@{viewModel.screenModel.sendButtonIconColor}"
+                    bind:textColor="@{viewModel.screenModel.sendButtonTextColor}"
+                    tools:drawableTint="@color/white"
+                    tools:ignore="UseCompatTextViewDrawableXml"
+                    tools:text="send_button_text"
+                    tools:textColor="@color/white" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_conversations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_top_banner"
+            app:layout_constraintVertical_bias="0"
+            bind:background="@{viewModel.screenModel.headerTitleColor}"
+            bind:visibility="@{!viewModel.needNewToken}"
+            tools:background="@color/white"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_live_chat_conversation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

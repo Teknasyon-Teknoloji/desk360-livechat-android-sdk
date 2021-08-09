@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.data.HeaderChatScreenModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_agent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_top_banner"
+        bind:background="@{viewModel.titleColor}"
+        tools:background="@color/white">
+
+        <ImageView
+            android:id="@+id/image_view_user_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@null"
+            android:visibility="@{viewModel.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:avatar="@{viewModel.companyLogo}"
+            tools:src="@drawable/bg_avatar"
+            tools:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/image_view_avatar_bg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/bg_avatar"
+            android:visibility="@{!viewModel.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:tint="@{viewModel.titleBackgroundColor}"
+            tools:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gotham_medium"
+            android:text="@{viewModel.initial}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="@{!viewModel.isAvatarExists ? view.VISIBLE : view.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_avatar_bg"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_avatar_bg"
+            app:layout_constraintStart_toStartOf="@+id/image_view_avatar_bg"
+            app:layout_constraintTop_toTopOf="@+id/image_view_avatar_bg"
+            bind:textColor="@{viewModel.titleColor}"
+            tools:text="YC"
+            tools:textColor="@color/white"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_view_status_bg"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_user_photo"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_user_photo"
+            bind:tint="@{viewModel.titleColor}"
+            tools:background="@color/white"
+            tools:src="@drawable/ic_online" />
+
+        <ImageView
+            android:id="@+id/image_view_status"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_online"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_status_bg"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_status_bg"
+            app:layout_constraintStart_toStartOf="@+id/image_view_status_bg"
+            app:layout_constraintTop_toTopOf="@+id/image_view_status_bg"
+            tools:src="@drawable/ic_online" />
+
+        <TextView
+            android:id="@+id/text_view_alias"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/gotham_medium"
+            android:text="@{viewModel.title}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_chat"
+            app:layout_constraintStart_toEndOf="@+id/image_view_user_photo"
+            app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
+            bind:textColor="@{viewModel.titleBackgroundColor}"
+            tools:text="Yasin ÇETİN"
+            tools:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/image_view_last_message"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_last_message"
+            app:layout_constraintStart_toStartOf="@+id/text_view_alias"
+            app:layout_constraintTop_toTopOf="@+id/text_view_last_message"
+            bind:drawable="@{viewModel.lastMessageDrawable}"
+            bind:tint="@{viewModel.titleBackgroundColor}"
+            bind:visibility="@{viewModel.lastMessageDrawable != null}"
+            tools:src="@drawable/ic_image" />
+
+        <TextView
+            android:id="@+id/text_view_last_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/gotham_medium"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@{viewModel.lastMessageBody}"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="8sp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_alias"
+            app:layout_constraintStart_toEndOf="@+id/image_view_last_message"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_alias"
+            bind:textColor="@{viewModel.titleBackgroundColor}"
+            tools:ignore="SmallSp"
+            tools:text="Photo"
+            tools:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/image_view_chat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_circle"
+            android:contentDescription="@null"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backgroundTint="@{viewModel.titleBackgroundColor}"
+            bind:tint="@{viewModel.titleColor}"
+            tools:backgroundTint="@color/black" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/secondTextColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_chat"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.desk360.livechat.data.model.chatsettings.General" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        bind:background="@{model.backgroundHeaderColor}"
+        tools:background="@color/bg_toolbar_header">
+
+        <ImageView
+            android:id="@+id/image_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:tint="@{model.headerTitleColor}" />
+
+        <ImageView
+            android:id="@+id/image_view_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:contentDescription="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_close"
+            bind:src="@{model.brandLogo}"
+            tools:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/gotham_medium"
+            android:text="@{model.headerTitle}"
+            android:textColor="@color/toolbar_header_title_text_color"
+            android:textSize="@dimen/toolbar_header_title_text_size"
+            app:layout_constraintStart_toStartOf="@+id/image_view_logo"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_logo"
+            bind:textColor="@{model.headerTitleColor}"
+            tools:text="Hi there!" />
+
+        <TextView
+            android:id="@+id/text_view_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="27dp"
+            android:fontFamily="@font/gotham_book"
+            android:text="@{model.headerSubTitle}"
+            android:textColor="@color/toolbar_header_title_text_color"
+            android:textSize="@dimen/toolbar_header_desc_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/image_view_close"
+            app:layout_constraintStart_toStartOf="@+id/image_view_logo"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_title"
+            bind:textColor="@{model.headerSubTitleColor}"
+            tools:text="Please let us know how our support team can help you." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

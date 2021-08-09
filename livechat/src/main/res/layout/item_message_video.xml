@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="gravity"
+            type="android.view.Gravity" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.viewmodel.VideoMessageViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+        bind:marginToMine="@{viewModel.isMine}"
+        tools:gravity="end">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_message_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
+                android:paddingStart="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:backgroundTint="@{viewModel.backgroundColor}"
+                tools:background="@drawable/bg_outgoing_message_row"
+                tools:ignore="NotSibling">
+
+                <ImageView
+                    android:id="@+id/image_view_preview"
+                    android:layout_width="220dp"
+                    android:layout_height="130dp"
+                    android:background="@color/secondTextColor"
+                    android:minWidth="220dp"
+                    android:minHeight="130dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_view_caption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:fontFamily="@font/gotham_book"
+                    android:linksClickable="true"
+                    android:paddingTop="5dp"
+                    android:text="@{viewModel.body}"
+                    android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                    android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    app:layout_constraintStart_toStartOf="@id/image_view_preview"
+                    app:layout_constraintTop_toBottomOf="@id/image_view_preview"
+                    bind:visibility="@{!viewModel.body.empty}"
+                    tools:text="caption caption caption caption caption"
+                    tools:textColor="@color/white"
+                    tools:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_preview"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_preview"
+                    app:layout_constraintTop_toTopOf="@+id/image_view_preview"
+                    bind:visibility="@{viewModel.isProcessing}"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/image_view_retry"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_refresh"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_preview"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_preview"
+                    app:layout_constraintTop_toTopOf="@+id/image_view_preview"
+                    app:tint="@color/white"
+                    bind:visibility="@{viewModel.isError}" />
+
+                <ImageView
+                    android:id="@+id/image_view_play_stop"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_play"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_preview"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_preview"
+                    app:layout_constraintTop_toTopOf="@+id/image_view_preview"
+                    bind:visibility="@{viewModel.isPreview}" />
+
+                <ImageView
+                    android:id="@+id/image_view_video"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_video"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_preview"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_preview"
+                    app:layout_constraintTop_toTopOf="@+id/image_view_preview"
+                    app:tint="@color/white"
+                    bind:visibility="@{!viewModel.isDownload}" />
+
+                <ImageView
+                    android:id="@+id/image_view_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_download"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_preview"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_preview"
+                    bind:visibility="@{!viewModel.isDownload}" />
+
+                <TextView
+                    android:id="@+id/text_view_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+                    android:singleLine="true"
+                    android:text="@{viewModel.time}"
+                    android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toStartOf="@+id/image_view_blue_tick"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_caption"
+                    tools:gravity="end"
+                    tools:ignore="SmallSp"
+                    tools:text="6:22" />
+
+                <ImageView
+                    android:id="@+id/image_view_blue_tick"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@null"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    bind:setMessageStatus="@{viewModel.status}"
+                    bind:visibility="@{viewModel.isMine}"
+                    tools:src="@drawable/ic_blue_tick_seen" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text="@{viewModel.language.sdkFailedToSendMessage}"                android:textColor="@color/color_error"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:drawableLeftCompat="@drawable/ic_error"
+                app:drawableStartCompat="@drawable/ic_error"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_message_box"
+                bind:visibility="@{viewModel.isError}"
+                tools:ignore="SmallSp"
+                tools:visibility="gone" />
+
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="progress_bar_uploading, text_view_uploading" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_uploading"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:progress="@{viewModel.percentage}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/layout_message_box"
+                app:layout_constraintTop_toBottomOf="@+id/layout_message_box"
+                bind:progressTint="@{viewModel.backgroundColor}"
+                tools:progress="50"
+                tools:progressBackgroundTint="@color/colorPrimary"
+                tools:progressTint="@color/white" />
+
+            <TextView
+                android:id="@+id/text_view_uploading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_medium"
+                android:text="@{viewModel.language.uploading}"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progress_bar_uploading"
+                bind:textColor="@{viewModel.backgroundColor}"
+                tools:ignore="SmallSp"
+                tools:textColor="@color/colorPrimary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

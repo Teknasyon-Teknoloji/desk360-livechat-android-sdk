@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="gravity"
+            type="android.view.Gravity" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.viewmodel.TextMessageViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+        bind:marginToMine="@{viewModel.isMine}"
+        tools:gravity="end">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_message_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
+                android:minWidth="100dp"
+                android:paddingStart="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:backgroundTint="@{viewModel.backgroundColor}"
+                tools:background="@drawable/bg_outgoing_message_row">
+
+                <TextView
+                    android:id="@+id/text_view_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:fontFamily="@font/gotham_book"
+                    android:gravity="center_vertical"
+                    android:linksClickable="true"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="@{viewModel.body}"
+                    android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                    android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="1 sds sd sd sdd d df df df df fdf df s sd sd sd sd sd sd ds "
+                    tools:textColor="@color/white" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_time_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_view_content"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/text_view_time"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="@{viewModel.time.trim()}"
+                        android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                        android:textSize="10sp"
+                        android:visibility="@{!viewModel.isError ? view.VISIBLE : view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image_view_blue_tick"
+                        tools:ignore="SmallSp"
+                        tools:text="6:22" />
+
+                    <ImageView
+                        android:id="@+id/image_view_blue_tick"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:visibility="@{viewModel.isMine ? view.VISIBLE : view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        bind:setMessageStatus="@{viewModel.status}"
+                        tools:src="@drawable/ic_blue_tick_seen"
+                        tools:visibility="visible" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text="@{viewModel.language.sdkFailedToSendMessage}"
+                android:textColor="@color/color_error"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:drawableLeftCompat="@drawable/ic_error"
+                app:drawableStartCompat="@drawable/ic_error"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_message_box"
+                bind:visibility="@{viewModel.isError}"
+                tools:ignore="SmallSp"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

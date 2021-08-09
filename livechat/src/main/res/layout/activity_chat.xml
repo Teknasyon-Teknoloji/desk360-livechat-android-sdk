@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.ChatViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context="com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity">
+
+        <include
+            android:id="@+id/toolbar_header"
+            layout="@layout/toolbar_chat_header"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:isTyping="@{viewModel.isReceiverTyping}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:model="@{viewModel.headerScreenModel}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_message_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:clipToPadding="false"
+            android:padding="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/view_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_header" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_composing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="view_divider, image_view_attachment, edit_text_message, image_view_emoji" />
+
+        <ImageView
+            android:id="@+id/image_view_arrow_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="23dp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/secondTextColor"
+            android:src="@drawable/ic_go_end"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/view_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="UnusedAttribute"
+            tools:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_edit_text"
+            android:backgroundTint="@color/color_error"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@{viewModel.language.sdkNoConnection}"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/view_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:visibility="@{!viewModel.hasConnection}"
+            tools:ignore="SmallSp"
+            tools:targetApi="lollipop"
+            tools:text="No Connection"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/divider_color"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_message" />
+
+        <ImageView
+            android:id="@+id/image_view_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@null"
+            android:padding="2dp"
+            android:src="@{viewModel.isOpenAttachment ? @drawable/ic_arrow_down : @drawable/ic_attachment}"
+            android:visibility="@{viewModel.headerScreenModel.activateChatbot ? view.GONE : view.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_send_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_send_message"
+            bind:tint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+            tools:src="@drawable/ic_arrow_down"
+            tools:tint="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/edit_text_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@null"
+            android:fontFamily="@font/gotham_medium"
+            android:hint="@{viewModel.language.writeMessage}"
+            android:maxLines="6"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/secondTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/layout_attachment"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_emoji"
+            app:layout_constraintStart_toEndOf="@+id/image_view_attachment"
+            bind:hintTextColor="@color/divider_color"
+            tools:hint="Enter your message" />
+
+        <ImageView
+            android:id="@+id/image_view_emoji"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@null"
+            android:src="@{viewModel.isOpenEmojiPopup ? @drawable/ic_keyboard : @drawable/ic_emoji}"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_send_message"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_send_message"
+            bind:tint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+            tools:src="@drawable/ic_keyboard"
+            tools:tint="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/image_view_send_message"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_send"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_text_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            bind:tint="@{(!viewModel.isTyping || !viewModel.hasConnection) ? @string/color_code_disable : viewModel.headerScreenModel.titleBackgroundColor}"
+            tools:tint="@color/colorPrimary" />
+
+        <TableLayout
+            android:id="@+id/layout_attachment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:stretchColumns="1,2,3"
+            android:visibility="@{viewModel.isOpenAttachment ? view.VISIBLE : view.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible">
+
+            <TableRow tools:ignore="UselessParent">
+
+                <TextView
+                    android:id="@+id/text_view_attachment_gallery"
+                    android:layout_column="1"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/gotham_light"
+                    android:gravity="center"
+                    android:text="@{viewModel.language.image}"
+                    app:drawableTopCompat="@drawable/ic_attachment_image"
+                    bind:drawableTint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    bind:textColor="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    tools:drawableTint="@color/colorPrimary"
+                    tools:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/text_view_attachment_video"
+                    android:layout_column="2"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/gotham_light"
+                    android:gravity="center"
+                    android:text="@{viewModel.language.video}"
+                    app:drawableTopCompat="@drawable/ic_attachment_video"
+                    bind:drawableTint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    bind:textColor="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    tools:drawableTint="@color/colorPrimary"
+                    tools:text="video"
+                    tools:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/text_view_attachment_document"
+                    android:layout_column="3"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/gotham_light"
+                    android:gravity="center"
+                    android:text="@{viewModel.language.document}"
+                    app:drawableTopCompat="@drawable/ic_attachment_document"
+                    bind:drawableTint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    bind:textColor="@{viewModel.headerScreenModel.titleBackgroundColor}"
+                    tools:drawableTint="@color/colorPrimary"
+                    tools:text="Document"
+                    tools:textColor="@color/black" />
+            </TableRow>
+        </TableLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

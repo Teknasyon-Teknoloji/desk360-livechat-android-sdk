@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="color"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dialog_ll_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/image_view_type"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:backgroundTint="@{color}"
+                    tools:background="@drawable/ic_internet"
+                    tools:src="@drawable/ic_warning"
+                    tools:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/text_view_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_type"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_type"
+                    app:layout_constraintTop_toBottomOf="@+id/image_view_type"
+                    tools:text="desc" />
+
+                <TextView
+                    android:id="@+id/text_view_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dialog_ll_root"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="26dp"
+                    android:background="@drawable/bg_button"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="center"
+                    tools:text="OK"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/image_view_type"
+                    app:layout_constraintStart_toStartOf="@+id/image_view_type"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_message"
+                    bind:backgroundTint="@{color}"
+                    tools:backgroundTint="@color/colorPrimary" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

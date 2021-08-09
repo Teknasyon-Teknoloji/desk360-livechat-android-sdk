@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="gravity"
+            type="android.view.Gravity" />
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.viewmodel.DocumentMessageViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:marginToMine="@{viewModel.isMine}"
+            tools:gravity="end">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_message_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
+                    android:minWidth="150dp"
+                    android:paddingStart="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:backgroundTint="@{viewModel.backgroundColor}"
+                    tools:background="@drawable/bg_outgoing_message_row"
+                    tools:ignore="NotSibling">
+
+                    <ImageView
+                        android:id="@+id/image_view_media_type"
+                        android:layout_width="21dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        app:layout_constraintBottom_toTopOf="@+id/text_view_caption"
+                        app:layout_constraintEnd_toStartOf="@+id/text_view_document_file_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        bind:extension="@{viewModel.extension}"
+                        tools:src="@drawable/ic_ext_xlsx" />
+
+                    <TextView
+                        android:id="@+id/text_view_caption"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="web"
+                        android:fontFamily="@font/gotham_book"
+                        android:linksClickable="true"
+                        android:paddingTop="5dp"
+                        android:text="@{viewModel.body}"
+                        android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                        android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/image_view_download"
+                        app:layout_constraintStart_toStartOf="@id/image_view_media_type"
+                        app:layout_constraintTop_toBottomOf="@id/image_view_media_type"
+                        bind:visibility="@{!viewModel.body.empty}"
+                        tools:text="sdns dbsdskdksdj hskd sdjkhskjdhdskhskjdhskdjhksjdh sskdh ksdh hds "
+                        tools:textColor="@color/white"
+                        tools:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_download"
+                        app:layout_constraintBottom_toBottomOf="@+id/image_view_media_type"
+                        app:layout_constraintEnd_toEndOf="@+id/image_view_media_type"
+                        app:layout_constraintStart_toStartOf="@+id/image_view_media_type"
+                        app:layout_constraintTop_toTopOf="@id/image_view_media_type"
+                        bind:indeterminateTint="@{viewModel.backgroundColor}"
+                        bind:visibility="@{viewModel.isProcessing}"
+                        tools:ignore="UnusedAttribute" />
+
+                    <TextView
+                        android:id="@+id/text_view_document_file_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="bottom"
+                        android:paddingStart="2dp"
+                        android:paddingLeft="2dp"
+                        android:text="@{viewModel.name}"
+                        android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                        app:layout_constraintBottom_toBottomOf="@id/image_view_media_type"
+                        app:layout_constraintEnd_toStartOf="@+id/image_view_download"
+                        bind:visibility="@{!viewModel.name.empty}"
+                        tools:text="MediaName.avi"
+                        tools:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/image_view_download"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_download"
+                        app:layout_constraintBottom_toBottomOf="@id/image_view_media_type"
+                        app:layout_constraintEnd_toEndOf="@+id/image_view_blue_tick"
+                        bind:visibility="@{!viewModel.isDownload}" />
+
+                    <TextView
+                        android:id="@+id/text_view_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/gotham_medium"
+                        android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+                        android:singleLine="true"
+                        android:text="@{viewModel.time}"
+                        android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
+                        android:textSize="10sp"
+                        android:visibility="@{!viewModel.isError ? view.VISIBLE : view.GONE}"
+                        app:layout_constraintEnd_toStartOf="@+id/image_view_blue_tick"
+                        app:layout_constraintTop_toBottomOf="@+id/text_view_caption"
+                        tools:gravity="end"
+                        tools:ignore="SmallSp"
+                        tools:text="6:22" />
+
+                    <ImageView
+                        android:id="@+id/image_view_blue_tick"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@null"
+                        android:visibility="@{viewModel.isMine ? view.VISIBLE : view.GONE}"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_view_time"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        bind:setMessageStatus="@{viewModel.status}"
+                        tools:src="@drawable/ic_blue_tick_seen"
+                        tools:visibility="visible" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text="@{viewModel.language.sdkFailedToSendMessage}"
+                    android:textColor="@color/color_error"
+                    android:textSize="10sp"
+                    android:visibility="gone"
+                    app:drawableLeftCompat="@drawable/ic_error"
+                    app:drawableStartCompat="@drawable/ic_error"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_message_box"
+                    bind:visibility="@{viewModel.isError}"
+                    tools:ignore="SmallSp"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

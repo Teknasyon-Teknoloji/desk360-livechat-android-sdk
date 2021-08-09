@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_header">240dp</dimen>
+    <dimen name="toolbar_header_title_text_size">28sp</dimen>
+    <dimen name="toolbar_header_desc_text_size">15sp</dimen>
+
+    <dimen name="dp_0">0dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
+</resources>

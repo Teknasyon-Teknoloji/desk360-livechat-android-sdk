@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">livechat</string>
+    <string name="send_transcript">Send Transcript</string>
+    <string name="end_chat">End Chat</string>
+    <string name="color_code_disable">#a7b7c8</string>
+    <string name="color_code_incoming_message_time">#a9aaad</string>
+</resources>
