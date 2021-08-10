@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference
 object Desk360LiveChat {
     private var context: WeakReference<Context>? = null
     var manager: BaseChatManager? = null
+    var title = LiveChatHelper.settings?.data?.language?.title.toString()
 
     fun getContext() = context?.get()
 
