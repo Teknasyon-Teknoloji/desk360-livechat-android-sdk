@@ -24,6 +24,7 @@ object FileManager {
     const val IMAGE_TYPE = "image/*"
     const val VIDEO_TYPE = "video/*"
     const val APPLICATION_TYPE = "application/*"
+    const val FILE_MAX_SIZE = 20
 
     val path = Desk360LiveChat.getContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.path
 

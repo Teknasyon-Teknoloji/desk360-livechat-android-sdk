@@ -370,7 +370,7 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
 
                 if (!it.isNull(sizeIndex)) {
                     val size = it.getInt(sizeIndex) / (1024 * 1024)
-                    if (size > 8) {
+                    if (size > FileManager.FILE_MAX_SIZE) {
                         ChatPopup.Builder(this)
                             .setMessage(LiveChatHelper.settings?.data?.language?.sdkFileLimit)
                             .setStatus(Utils.DialogStatus.WARNING)

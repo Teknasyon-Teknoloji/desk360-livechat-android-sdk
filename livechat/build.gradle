@@ -7,7 +7,7 @@ plugins {
 apply plugin: 'maven-publish'
 def artifactId = 'livechat-android-sdk'
 def groupId = 'com.github.Teknasyon-Teknoloji'
-def versionN = "1.0.2"
+def versionN = "1.0.3"
 
 android {
     compileSdkVersion 30
