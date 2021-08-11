@@ -82,15 +82,15 @@ Or Maven
 ```markup
 	<application>
 	...
-         <provider
-            android:name=".YourFileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-         </provider>
+         	<provider
+         	   android:name=".YourFileProvider"
+         	   android:authorities="${applicationId}.provider"
+         	   android:exported="false"
+         	   android:grantUriPermissions="true">
+         	   <meta-data
+          	      android:name="android.support.FILE_PROVIDER_PATHS"
+          	      android:resource="@xml/provider_paths" />
+        	 </provider>
 	 ....
 	 </application
 ```
