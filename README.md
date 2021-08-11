@@ -77,6 +77,23 @@ Or Maven
 	</dependency>
 ```
 
+**Step 3.** Add File Provider to Your AndroidManifest.xml
+
+```
+<application>
+	...
+        <provider
+            android:name=".YourFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+	....
+ </application
+```
 
 ### Usage
 
