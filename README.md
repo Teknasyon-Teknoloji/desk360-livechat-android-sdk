@@ -79,10 +79,10 @@ Or Maven
 
 **Step 3.** Add File Provider to Your AndroidManifest.xml
 
-```
-<application>
+```markup
+	<application>
 	...
-        <provider
+         <provider
             android:name=".YourFileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
@@ -90,9 +90,9 @@ Or Maven
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
-	....
- </application
+         </provider>
+	 ....
+	 </application
 ```
 
 ### Usage
