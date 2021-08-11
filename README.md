@@ -1,4 +1,4 @@
-# Desk360 Live Chat Android SDK
+# Desk360 Chat Android SDK
 
  ![img](https://img.shields.io/badge/kotlin-v1.5.20-brightgreen.svg?logoColor=orange&logo=kotlin)   [![](https://jitpack.io/v/Teknasyon-Teknoloji/desk360-livechat-android-sdk.svg)](https://jitpack.io/#Teknasyon-Teknoloji/desk360-livechat-android-sdk)
 
