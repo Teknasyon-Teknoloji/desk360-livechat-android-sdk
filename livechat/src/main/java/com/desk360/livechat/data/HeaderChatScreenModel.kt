@@ -12,9 +12,12 @@ data class HeaderChatScreenModel(
     val title: String? = "",
     val titleColor: String? = LiveChatHelper.settings?.data?.config?.general?.headerTitleColor,
     val titleBackgroundColor: String? = LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor,
+    val sectionHeaderTitleColor: String? = LiveChatHelper.settings?.data?.config?.general?.sectionHeaderTitleColor,
     val lastMessageType: Int? = null,
     val lastMessageDrawable: Int? = null,
     val lastMessageBody: String? = null,
     val statusText: String? = LiveChatHelper.settings?.data?.language?.online,
-    val typingText: String? = LiveChatHelper.settings?.data?.language?.onlineTyping
+    val typingText: String? = LiveChatHelper.settings?.data?.language?.onlineTyping,
+    val writeMessageTextColor: String? = LiveChatHelper.settings?.data?.config?.chat?.writeMessageTextColor,
+    val writeMessageIconColor: String? = LiveChatHelper.settings?.data?.config?.chat?.writeMessageIconColor
 )

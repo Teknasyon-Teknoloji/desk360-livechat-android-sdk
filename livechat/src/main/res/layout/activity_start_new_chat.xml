@@ -18,16 +18,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:background="@{viewModel.screenModel.backgroundColor}"
+        bind:background="@{viewModel.general.backgroundMainColor}"
         tools:context="com.desk360.livechat.presentation.activity.livechat.StartNewChatActivity">
 
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar_header"
+            app:companyLogo="@{viewModel.companyLogo}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:model="@{viewModel.screenModel}" />
+            app:model="@{viewModel.general}" />
 
         <View
             android:id="@+id/view_top_banner"
@@ -36,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            bind:background="@{viewModel.screenModel.backgroundHeaderColor}"
+            bind:background="@{viewModel.general.backgroundHeaderColor}"
             tools:background="@color/colorPrimary" />
 
         <androidx.cardview.widget.CardView
@@ -65,14 +66,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gotham_medium"
-                    android:text="@{viewModel.screenModel.brandName}"
+                    android:text="@{viewModel.companyName}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    bind:textColor="@{viewModel.screenModel.backgroundHeaderColor}"
+                    bind:textColor="@{viewModel.general.backgroundHeaderColor}"
                     tools:text="brand_name" />
 
                 <View
@@ -94,13 +95,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:fontFamily="@font/gotham_medium"
-                    android:text="@{viewModel.screenModel.sectionHeaderTitle}"
+                    android:text="@{viewModel.general.sectionHeaderTitle}"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
                     app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
                     app:layout_constraintTop_toBottomOf="@+id/text_view_company_name"
-                    bind:textColor="@{viewModel.screenModel.sectionHeaderTitleColor}"
+                    bind:textColor="@{viewModel.general.sectionHeaderTitleColor}"
                     tools:text="section_header_title"
                     tools:textColor="@color/primaryTextColor" />
 
@@ -109,12 +110,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gotham_medium"
-                    android:text="@{viewModel.screenModel.sectionHeaderText}"
+                    android:text="@{viewModel.general.sectionHeaderText}"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
                     app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
                     app:layout_constraintTop_toBottomOf="@+id/text_view_new_chat_title"
-                    bind:textColor="@{viewModel.screenModel.sectionHeaderTextColor}"
+                    bind:textColor="@{viewModel.general.sectionHeaderTextColor}"
                     tools:text="section_header_text"
                     tools:textColor="@color/secondTextColor" />
 
@@ -129,7 +130,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
                     app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
                     app:layout_constraintTop_toBottomOf="@+id/text_view_start_new_chat_desc"
-                    bind:backgroundTint="@{viewModel.screenModel.sendButtonBackgroundColor}"
+                    bind:backgroundTint="@{viewModel.general.sendButtonBackgroundColor}"
                     tools:backgroundTint="@color/black"
                     tools:ignore="UseCompatTextViewDrawableXml"
                     tools:targetApi="lollipop" />
@@ -138,18 +139,18 @@
                     android:id="@+id/text_view_start_new_chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_send"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/gotham_medium"
                     android:gravity="center_vertical"
-                    android:text="@{viewModel.screenModel.sendButtonText}"
+                    android:text="@{viewModel.general.sendButtonText}"
                     android:textSize="14sp"
-                    app:drawableStartCompat="@drawable/ic_send"
                     app:layout_constraintBottom_toBottomOf="@+id/text_view_start_new_chat_bg"
                     app:layout_constraintEnd_toEndOf="@+id/text_view_company_name"
                     app:layout_constraintStart_toStartOf="@+id/text_view_company_name"
                     app:layout_constraintTop_toTopOf="@+id/text_view_start_new_chat_bg"
-                    bind:drawableTint="@{viewModel.screenModel.sendButtonIconColor}"
-                    bind:textColor="@{viewModel.screenModel.sendButtonTextColor}"
+                    bind:drawableTint="@{viewModel.general.sendButtonTextColor}"
+                    bind:textColor="@{viewModel.general.sendButtonTextColor}"
                     tools:drawableTint="@color/white"
                     tools:ignore="UseCompatTextViewDrawableXml"
                     tools:text="send_button_text"
@@ -166,11 +167,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_top_banner"
             app:layout_constraintVertical_bias="0"
-            bind:background="@{viewModel.screenModel.headerTitleColor}"
+            bind:background="@{viewModel.general.headerTitleColor}"
             bind:visibility="@{!viewModel.needNewToken}"
             tools:background="@color/white"
             tools:itemCount="1"
             tools:listitem="@layout/item_live_chat_conversation" />
+
+        <View
+            android:id="@+id/view_desk360"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:background="@{viewModel.general.backgroundColor}"
+            tools:background="@color/color_error" />
+
+        <ImageView
+            android:id="@+id/image_view_desk360"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_by_desk360"
+            app:layout_constraintBottom_toBottomOf="@+id/view_desk360"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_desk360" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.util.ChatUtils
 import com.desk360.livechat.data.HeaderChatScreenModel
-import com.desk360.livechat.data.model.chatsettings.General
 import com.desk360.livechat.domain.usecase.*
 import com.desk360.livechat.manager.LiveChatFirebaseHelper
 import com.desk360.livechat.manager.LiveChatHelper
@@ -18,12 +17,12 @@ class StartNewChatViewModel : BaseViewModel() {
         )
     }
 
-    val agent: MutableLiveData<HeaderChatScreenModel> by lazy {
-        MutableLiveData(LiveChatSharedPrefManager.agent)
+    val companyName: MutableLiveData<String> by lazy {
+        MutableLiveData(LiveChatHelper.settings?.data?.config?.general?.brandName)
     }
 
-    val screenModel: MutableLiveData<General> by lazy {
-        MutableLiveData(LiveChatHelper.settings?.data?.config?.general)
+    val companyLogo: MutableLiveData<String> by lazy {
+        MutableLiveData(LiveChatHelper.settings?.data?.config?.general?.brandLogo)
     }
 
     val conversations: MutableLiveData<List<HeaderChatScreenModel>> by lazy {
@@ -31,6 +30,14 @@ class StartNewChatViewModel : BaseViewModel() {
     }
 
     init {
+        companyName.value =
+            if (LiveChatHelper.settings?.data?.config?.general?.brandName.isNullOrEmpty()) LiveChatHelper.settings?.data?.applicationName
+            else LiveChatHelper.settings?.data?.config?.general?.brandName
+
+        companyLogo.value =
+            if (LiveChatHelper.settings?.data?.config?.general?.brandLogo.isNullOrEmpty()) LiveChatHelper.settings?.data?.applicationLogo
+            else LiveChatHelper.settings?.data?.config?.general?.brandLogo
+
         getDatas()
     }
 
@@ -46,8 +53,8 @@ class StartNewChatViewModel : BaseViewModel() {
                 ChatUtils.Conversation.CHAT_BOT
             )
         ).execute(onSuccess = {
-            if(!LiveChatSharedPrefManager.isNeedNewToken()) {
-                conversations.value =it
+            if (!LiveChatSharedPrefManager.isNeedNewToken()) {
+                conversations.value = it
             }
             isNeedNewToken.value = it.isEmpty()
         }, onError = {
@@ -84,7 +91,6 @@ class StartNewChatViewModel : BaseViewModel() {
                     isEndedSession.value = false
                 })
             } else {
-                agent.value = result
                 LiveChatSharedPrefManager.agent = result
                 updateConversation(result)
             }

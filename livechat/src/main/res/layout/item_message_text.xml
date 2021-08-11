@@ -60,12 +60,12 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:text="@{viewModel.body}"
-                    android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
                     android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    bind:textColor="@{viewModel.messageTextColor}"
                     tools:ignore="RtlSymmetry"
                     tools:text="1 sds sd sd sdd d df df df df fdf df s sd sd sd sd sd sd ds "
                     tools:textColor="@color/white" />
@@ -83,18 +83,18 @@
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
                         android:fontFamily="@font/gotham_medium"
                         android:gravity="end"
                         android:singleLine="true"
                         android:text="@{viewModel.time.trim()}"
-                        android:textColor="@{viewModel.isMine ?  @color/white:  @color/black}"
                         android:textSize="10sp"
                         android:visibility="@{!viewModel.isError ? view.VISIBLE : view.GONE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/image_view_blue_tick"
+                        bind:textColor="@{viewModel.messageTextColor}"
                         tools:ignore="SmallSp"
-                        tools:text="6:22" />
+                        tools:text="6:22"
+                        tools:textColor="@color/white" />
 
                     <ImageView
                         android:id="@+id/image_view_blue_tick"

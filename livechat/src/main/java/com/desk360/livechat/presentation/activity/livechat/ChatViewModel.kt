@@ -14,12 +14,15 @@ import com.desk360.livechat.manager.LiveChatFirebaseHelper
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import java.io.File
+import java.net.ConnectException
+import java.net.UnknownHostException
 import java.util.*
 
 class ChatViewModel : BaseViewModel() {
@@ -288,7 +291,7 @@ class ChatViewModel : BaseViewModel() {
                         timerTyping.cancel()
                         val isTyping = snapshot.children.firstOrNull()
                             ?.child("typing")?.value == LiveChatFirebaseHelper.userId
-                        isReceiverTyping.value = isReceiverTyping.value == true || isTyping
+                        isReceiverTyping.value = (isReceiverTyping.value == true || isTyping) && LiveChatHelper.settings?.data?.config?.chat?.typingStatus == true
                         timerTyping.start()
                     }
 

@@ -10,6 +10,10 @@ import com.desk360.livechat.manager.LiveChatHelper
 abstract class BaseMessageViewModel<T : Message> : BaseViewModel() {
     private var myMessage: T? = null
 
+    val messageTextColor: MutableLiveData<String> by lazy {
+        MutableLiveData(LiveChatHelper.settings?.data?.config?.chat?.messageTextColor)
+    }
+
     val backgroundColor: MutableLiveData<String> by lazy {
         MutableLiveData(LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor)
     }
@@ -35,15 +39,19 @@ abstract class BaseMessageViewModel<T : Message> : BaseViewModel() {
     }
 
     open fun handleMessage(message: T) {
+        backgroundColor.value =
+            if (message.isMine) LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor else
+                LiveChatHelper.settings?.data?.config?.chat?.messageBackgroundColor
+
+        messageTextColor.value =
+            if (message.isMine) LiveChatHelper.settings?.data?.config?.general?.headerTitleColor else
+                LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor
+
         myMessage = message
         isError.value = message.status == ChatUtils.Status.ERROR
         body.value = message.body
         isMine.value = message.isMine
         time.value = message.getTime()
         status.value = message.status
-
-        backgroundColor.value =
-            if (message.isMine) LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor else
-                "#F0F2F6"
     }
 }

@@ -3,6 +3,7 @@ package com.desk360.livechat
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,11 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.bumptech.glide.Glide
-import com.google.android.material.textfield.TextInputLayout
 import com.desk360.base.util.ChatUtils
 import com.desk360.livechat.manager.FileManager
 import com.desk360.livechat.manager.LiveChatHelper
-import com.desk360.livechat.R
+import com.google.android.material.textfield.TextInputLayout
+
 
 object BindingExt {
 
@@ -36,6 +37,13 @@ object BindingExt {
     }
 
     @JvmStatic
+    @BindingAdapter("bind:textColorHint")
+    fun setTextColorHint(textView: TextView, color: String?) {
+        if (!color.isNullOrEmpty())
+            textView.setHintTextColor(Color.parseColor(color))
+    }
+
+    @JvmStatic
     @BindingAdapter("bind:background")
     fun setBackgroundColor(view: View, color: String?) {
         if (color?.isNotEmpty() == true)
@@ -46,9 +54,10 @@ object BindingExt {
     @BindingAdapter("bind:drawableTint")
     fun setDrawableTint(textView: TextView, color: String?) {
         color?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 try {
-                    textView.compoundDrawables[0].setTint(Color.parseColor(color))
+                    textView.compoundDrawableTintList =
+                        ColorStateList.valueOf(Color.parseColor(color))
                 } catch (ex: Exception) {
 
                 }
@@ -163,10 +172,11 @@ object BindingExt {
 
     @JvmStatic
     @BindingAdapter("bind:boxStrokeColor")
-    fun setBoxStrokeColor(textInputLayout: TextInputLayout, color: String?) {
+    fun setBoxStrokeColor(view: View, color: String?) {
         color?.let {
             try {
-                textInputLayout.boxStrokeColor = Color.parseColor(color)
+                val background = view.background as GradientDrawable
+                background.setStroke(1, Color.parseColor(color))
             } catch (ex: Exception) {
 
             }

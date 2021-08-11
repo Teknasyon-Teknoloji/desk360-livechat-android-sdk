@@ -103,15 +103,25 @@
             tools:text="Back"
             tools:textColor="@color/white" />
 
+        <View
+            android:id="@+id/view_desk360"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:background="@{viewModel.general.backgroundColor}"
+            tools:background="@color/color_error" />
+
         <ImageView
             android:id="@+id/image_view_desk360"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_by_desk360"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/view_desk360"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_desk360" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

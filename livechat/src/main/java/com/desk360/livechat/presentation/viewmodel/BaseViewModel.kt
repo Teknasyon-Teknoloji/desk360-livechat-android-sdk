@@ -1,6 +1,7 @@
 package com.desk360.livechat.presentation.viewmodel
 
 import androidx.lifecycle.*
+import com.desk360.livechat.data.model.chatsettings.General
 import com.google.firebase.FirebaseNetworkException
 import com.desk360.livechat.data.model.chatsettings.Language
 import com.desk360.livechat.manager.LiveChatHelper
@@ -10,6 +11,10 @@ import java.net.UnknownHostException
 abstract class BaseViewModel : ViewModel(), LifecycleObserver {
     val language: MutableLiveData<Language> by lazy {
         MutableLiveData(LiveChatHelper.settings?.data?.language)
+    }
+
+    val general: MutableLiveData<General> by lazy {
+        MutableLiveData(LiveChatHelper.settings?.data?.config?.general)
     }
 
     private val _errorMessage: MutableLiveData<String> = MutableLiveData("")

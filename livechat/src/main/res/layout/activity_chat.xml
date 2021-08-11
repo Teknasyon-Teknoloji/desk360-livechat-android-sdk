@@ -109,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/image_view_send_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/image_view_send_message"
-            bind:tint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+            bind:tint="@{viewModel.headerScreenModel.writeMessageIconColor}"
             tools:src="@drawable/ic_arrow_down"
             tools:tint="@color/colorPrimary" />
 
@@ -123,7 +123,7 @@
             android:hint="@{viewModel.language.writeMessage}"
             android:maxLines="6"
             android:padding="5dp"
-            android:textColor="@color/black"
+            bind:textColor="@{viewModel.headerScreenModel.writeMessageTextColor}"
             android:textColorHint="@color/secondTextColor"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/layout_attachment"
@@ -142,7 +142,7 @@
             android:src="@{viewModel.isOpenEmojiPopup ? @drawable/ic_keyboard : @drawable/ic_emoji}"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_send_message"
             app:layout_constraintEnd_toStartOf="@+id/image_view_send_message"
-            bind:tint="@{viewModel.headerScreenModel.titleBackgroundColor}"
+            bind:tint="@{viewModel.headerScreenModel.writeMessageIconColor}"
             tools:src="@drawable/ic_keyboard"
             tools:tint="@color/colorPrimary" />
 
@@ -156,7 +156,7 @@
             android:src="@drawable/ic_send"
             app:layout_constraintBottom_toBottomOf="@+id/edit_text_message"
             app:layout_constraintEnd_toEndOf="parent"
-            bind:tint="@{(!viewModel.isTyping || !viewModel.hasConnection) ? @string/color_code_disable : viewModel.headerScreenModel.titleBackgroundColor}"
+            bind:tint="@{(!viewModel.isTyping || !viewModel.hasConnection) ? @string/color_code_disable : viewModel.headerScreenModel.writeMessageIconColor}"
             tools:tint="@color/colorPrimary" />
 
         <TableLayout

@@ -36,12 +36,12 @@
             android:layout_marginTop="40dp"
             android:fontFamily="@font/gotham_medium"
             android:text="@{viewModel.screenModel.headerTitle}"
-            android:textColor="@color/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            bind:textColor="@{viewModel.general.sectionHeaderTitleColor}"
             tools:text="Chat Session Ended" />
 
         <TextView
@@ -54,6 +54,7 @@
             android:fontFamily="@font/gotham_book"
             android:gravity="center"
             android:text="@{viewModel.screenModel.headerText}"
+            bind:textColor="@{viewModel.general.sectionHeaderTextColor}"
             android:textColor="@color/secondTextColor"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,11 +98,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
+            android:background="@drawable/bg_circle"
             android:contentDescription="@null"
             android:src="@drawable/ic_unlike"
             app:layout_constraintBottom_toBottomOf="@+id/view_feedback"
             app:layout_constraintEnd_toStartOf="@+id/view_feedback"
-            app:layout_constraintTop_toTopOf="@+id/view_feedback" />
+            app:layout_constraintTop_toTopOf="@+id/view_feedback"
+            bind:backgroundTint="@{viewModel.screenModel.iconDownColor}" />
 
         <ImageView
             android:id="@+id/image_view_like"
@@ -109,26 +112,28 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
+            android:background="@drawable/bg_circle"
             android:contentDescription="@null"
             android:src="@drawable/ic_like"
             app:layout_constraintBottom_toBottomOf="@+id/view_feedback"
             app:layout_constraintStart_toEndOf="@+id/view_feedback"
-            app:layout_constraintTop_toTopOf="@+id/view_feedback" />
+            app:layout_constraintTop_toTopOf="@+id/view_feedback"
+            bind:backgroundTint="@{viewModel.screenModel.iconUpColor}" />
 
         <TextView
             android:id="@+id/text_view_start_new_chat_bg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:enabled="@{!viewModel.isRunningProgress}"
             android:layout_marginBottom="30dp"
             android:background="@drawable/ic_bg_button"
             android:drawablePadding="5dp"
+            android:enabled="@{!viewModel.isRunningProgress}"
             android:fontFamily="@font/gotham_medium"
             app:layout_constraintEnd_toEndOf="@+id/text_view_session_end"
             app:layout_constraintStart_toStartOf="@+id/text_view_session_end"
             app:layout_constraintTop_toBottomOf="@+id/image_view_like"
-            bind:backgroundTint="@{viewModel.headerCompanyScreenModel.titleBackgroundColor}"
+            bind:backgroundTint="@{viewModel.general.sendButtonBackgroundColor}"
             tools:backgroundTint="@color/colorPrimary"
             tools:ignore="UseCompatTextViewDrawableXml" />
 
@@ -147,21 +152,31 @@
             app:layout_constraintStart_toStartOf="@+id/text_view_start_new_chat_bg"
             app:layout_constraintTop_toTopOf="@+id/text_view_start_new_chat_bg"
             bind:drawableTint="@{viewModel.headerCompanyScreenModel.titleColor}"
-            bind:textColor="@{viewModel.headerCompanyScreenModel.titleColor}"
+            bind:textColor="@{viewModel.general.sendButtonTextColor}"
             tools:drawableTint="@color/white"
             tools:ignore="UseCompatTextViewDrawableXml"
             tools:text="start new chat"
             tools:textColor="@color/white" />
 
+        <View
+            android:id="@+id/view_desk360"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:background="@{viewModel.general.backgroundColor}"
+            tools:background="@color/color_error" />
+
         <ImageView
             android:id="@+id/image_view_desk360"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_by_desk360"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/view_desk360"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_desk360" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

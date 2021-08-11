@@ -5,6 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="companyLogo"
+            type="String" />
 
         <variable
             name="model"
@@ -39,7 +42,7 @@
             android:contentDescription="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/image_view_close"
-            bind:src="@{model.brandLogo}"
+            bind:src="@{companyLogo}"
             tools:src="@drawable/ic_close" />
 
         <TextView

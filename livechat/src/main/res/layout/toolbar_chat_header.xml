@@ -81,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_view_back"
             app:layout_constraintTop_toTopOf="parent"
-            bind:tint="@{model.titleColor}" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,31 +124,35 @@
 
         <TextView
             android:id="@+id/text_view_alias"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:ellipsize="end"
             android:fontFamily="@font/gotham_medium"
+            android:singleLine="true"
             android:text="@{model.title}"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_menu"
             app:layout_constraintStart_toEndOf="@+id/image_view_user_photo"
             app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
-            bind:textColor="@{model.titleColor}"
             tools:text="Yasin ÇETİN" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:fontFamily="@font/gotham_book"
             android:gravity="top"
+            android:singleLine="true"
             android:text="@{isTyping ? model.typingText : model.statusText}"
             android:textColor="@color/white"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_alias"
             app:layout_constraintStart_toStartOf="@+id/text_view_alias"
             app:layout_constraintTop_toBottomOf="@+id/text_view_alias"
-            bind:textColor="@{model.titleColor}"
             tools:ignore="SmallSp"
             tools:text="offline" />
     </androidx.constraintlayout.widget.ConstraintLayout>

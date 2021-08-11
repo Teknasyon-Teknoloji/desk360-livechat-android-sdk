@@ -40,11 +40,11 @@
             android:fontFamily="@font/gotham_book"
             android:gravity="center"
             android:text="@{viewModel.screenModel.welcomeMessage}"
-            android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            bind:textColor="@{viewModel.general.sectionHeaderTitleColor}"
             tools:text="Please introduce yourself so
 we can help you better." />
 
@@ -65,12 +65,13 @@ we can help you better." />
             android:padding="10dp"
             android:singleLine="true"
             android:text="@{viewModel.session.name}"
-            android:textColor="@color/black"
-            android:textColorHint="@color/secondTextColor"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_desc"
+            bind:boxStrokeColor="@{viewModel.screenModel.placeholderColor}"
+            bind:textColor="@{viewModel.screenModel.messageTextColor}"
+            bind:textColorHint="@{viewModel.screenModel.placeholderColor}"
             tools:ignore="RtlSymmetry"
             tools:text="name" />
 
@@ -101,12 +102,13 @@ we can help you better." />
             android:padding="10dp"
             android:singleLine="true"
             android:text="@{viewModel.session.email}"
-            android:textColor="@color/black"
-            android:textColorHint="@color/secondTextColor"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/edit_text_nickname"
             app:layout_constraintStart_toStartOf="@+id/edit_text_nickname"
             app:layout_constraintTop_toBottomOf="@+id/text_view_nickname_error"
+            bind:boxStrokeColor="@{viewModel.screenModel.placeholderColor}"
+            bind:textColor="@{viewModel.screenModel.messageTextColor}"
+            bind:textColorHint="@{viewModel.screenModel.placeholderColor}"
             tools:ignore="RtlSymmetry"
             tools:text="email address" />
 
@@ -138,13 +140,14 @@ we can help you better." />
             android:minLines="5"
             android:padding="10dp"
             android:singleLine="false"
-            android:textColor="@color/black"
-            android:textColorHint="@color/secondTextColor"
             android:textSize="16sp"
             android:visibility="@{viewModel.isOffline ? view.VISIBLE : view.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/edit_text_nickname"
             app:layout_constraintStart_toStartOf="@+id/edit_text_nickname"
             app:layout_constraintTop_toBottomOf="@+id/text_view_email_error"
+            bind:boxStrokeColor="@{viewModel.screenModel.placeholderColor}"
+            bind:textColor="@{viewModel.screenModel.messageTextColor}"
+            bind:textColorHint="@{viewModel.screenModel.placeholderColor}"
             tools:ignore="RtlSymmetry"
             tools:text="message" />
 
@@ -174,7 +177,7 @@ we can help you better." />
             app:layout_constraintEnd_toEndOf="@+id/text_view_desc"
             app:layout_constraintStart_toStartOf="@+id/text_view_desc"
             app:layout_constraintTop_toBottomOf="@+id/text_view_message_error"
-            bind:backgroundTint="@{viewModel.headerCompanyScreenModel.titleBackgroundColor}"
+            bind:backgroundTint="@{viewModel.general.sendButtonBackgroundColor}"
             tools:backgroundTint="@color/colorPrimary"
             tools:ignore="UseCompatTextViewDrawableXml" />
 
@@ -182,20 +185,41 @@ we can help you better." />
             android:id="@+id/text_view_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_send"
             android:drawablePadding="5dp"
             android:fontFamily="@font/gotham_medium"
             android:gravity="center_vertical"
             android:text="@{viewModel.screenModel.buttonText}"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:drawableStartCompat="@drawable/ic_send"
             app:layout_constraintBottom_toBottomOf="@+id/text_view_login_bg"
             app:layout_constraintEnd_toEndOf="@+id/text_view_desc"
             app:layout_constraintStart_toStartOf="@+id/text_view_desc"
             app:layout_constraintTop_toTopOf="@+id/text_view_login_bg"
-            bind:drawableTint="@{viewModel.headerCompanyScreenModel.titleColor}"
-            bind:textColor="@{viewModel.headerCompanyScreenModel.titleColor}"
+            bind:drawableTint="@{viewModel.general.sendButtonTextColor}"
+            bind:textColor="@{viewModel.general.sendButtonTextColor}"
             tools:ignore="UseCompatTextViewDrawableXml"
             tools:text="button_text" />
+
+        <View
+            android:id="@+id/view_desk360"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:background="@{viewModel.general.backgroundColor}"
+            tools:background="@color/color_error" />
+
+        <ImageView
+            android:id="@+id/image_view_desk360"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_by_desk360"
+            app:layout_constraintBottom_toBottomOf="@+id/view_desk360"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_desk360" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
