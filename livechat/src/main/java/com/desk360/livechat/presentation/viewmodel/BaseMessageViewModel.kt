@@ -45,7 +45,7 @@ abstract class BaseMessageViewModel<T : Message> : BaseViewModel() {
 
         messageTextColor.value =
             if (message.isMine) LiveChatHelper.settings?.data?.config?.general?.headerTitleColor else
-                LiveChatHelper.settings?.data?.config?.general?.backgroundHeaderColor
+                LiveChatHelper.settings?.data?.config?.chat?.messageTextColor
 
         myMessage = message
         isError.value = message.status == ChatUtils.Status.ERROR

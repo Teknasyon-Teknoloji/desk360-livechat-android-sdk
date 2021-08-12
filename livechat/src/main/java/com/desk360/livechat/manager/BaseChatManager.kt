@@ -8,6 +8,8 @@ abstract class BaseChatManager {
     var userName: String = ""
     var userEmailAddress: String = ""
     var languageCode: String = ""
+    var deviceId: String? = ""
+    var pushToken: String? = ""
 
     abstract fun init(context: Context, isActive: (Boolean) -> Unit)
     abstract fun start(context: Context)

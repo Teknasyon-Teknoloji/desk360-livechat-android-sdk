@@ -3,15 +3,15 @@ package com.desk360.livechat.manager
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.NonNull
-import com.google.android.gms.common.internal.Preconditions.checkNotEmpty
-import com.google.firebase.FirebaseOptions
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import com.desk360.base.util.Utils
 import com.desk360.livechat.data.model.chatsettings.FirebaseConfig
 import com.desk360.livechat.domain.usecase.ConfigUseCase
 import com.desk360.livechat.manager.LiveChatFirebaseHelper.FIREBASE_NAME
 import com.desk360.livechat.presentation.activity.livechat.StartNewChatActivity
+import com.google.android.gms.common.internal.Preconditions.checkNotEmpty
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 
 class LiveChatManager internal constructor(builder: Builder) : BaseChatManager() {
     init {
@@ -20,6 +20,8 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         userName = builder.userName
         userEmailAddress = builder.userEmailAddress
         languageCode = builder.languageCode
+        deviceId = builder.deviceId
+        pushToken = builder.pushToken
     }
 
     class Builder {
@@ -28,6 +30,8 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         internal var languageCode: String = ""
         internal var userName: String = ""
         internal var userEmailAddress: String = ""
+        internal var deviceId: String? = ""
+        internal var pushToken: String? = ""
 
         /**
          * token
@@ -67,6 +71,22 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         @NonNull
         fun setUserEmailAddress(userEmailAddress: String) = apply {
             this.userEmailAddress = userEmailAddress
+        }
+
+        /**
+         * Device Id
+         */
+        @NonNull
+        fun setDeviceId(deviceId: String?) = apply {
+            this.deviceId = deviceId
+        }
+
+        /**
+         * push token
+         */
+        @NonNull
+        fun setPushNotificationToken(pushToken: String?) = apply {
+            this.pushToken = pushToken
         }
 
         @NonNull
