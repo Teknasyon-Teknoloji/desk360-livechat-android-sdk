@@ -53,7 +53,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="3dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -120,22 +119,24 @@
 
                 <TextView
                     android:id="@+id/text_view_caption"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoLink="web"
+                    android:justificationMode="inter_word"
                     android:fontFamily="@font/gotham_book"
+                    android:textAlignment="inherit"
                     android:linksClickable="true"
                     android:text="@{viewModel.body}"
                     bind:textColor="@{viewModel.messageTextColor}"
                     android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
                     android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/card_view_body"
-                    app:layout_constraintStart_toStartOf="@id/card_view_body"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/card_view_body"
                     bind:visibility="@{!viewModel.body.empty}"
-                    tools:text="caption caption caption caption caption"
+                    tools:text="caption"
                     tools:textColor="@color/white"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"
+                    tools:targetApi="o" />
 
                 <TextView
                     android:id="@+id/text_view_time"

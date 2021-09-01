@@ -3,18 +3,18 @@ package com.desk360.base.provider
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.net.Uri
-import com.desk360.base.util.Utils
-import com.desk360.livechat.manager.Desk360LiveChat
+import android.os.Looper
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.plugins.RxJavaPlugins
+
 
 class ChatProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         EmojiManager.install(GoogleEmojiProvider())
-        RxJavaPlugins.setErrorHandler {
-            Desk360LiveChat.getContext()?.let { it1 -> Utils.handleError(it1, it) }
-        }
+        setUpRxPlugin()
 
         return true
     }
@@ -39,4 +39,14 @@ class ChatProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ) = 0
+
+    companion object {
+        private fun setUpRxPlugin() {
+            val asyncMainThreadScheduler = AndroidSchedulers.from(Looper.getMainLooper(), true)
+            RxAndroidPlugins.setInitMainThreadSchedulerHandler { asyncMainThreadScheduler }
+            RxJavaPlugins.setErrorHandler { th: Throwable ->
+
+            }
+        }
+    }
 }

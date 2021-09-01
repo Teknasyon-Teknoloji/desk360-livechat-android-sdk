@@ -15,6 +15,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.desk360.base.util.ChatUtils
 import com.desk360.livechat.manager.FileManager
 import com.desk360.livechat.manager.LiveChatHelper
@@ -120,7 +121,7 @@ object BindingExt {
         imageUrl?.let {
             Glide.with(view)
                 .load(imageUrl)
-                .override(220, 130)
+                .centerCrop()
                 .into(view)
         }
     }

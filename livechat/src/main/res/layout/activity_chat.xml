@@ -109,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/image_view_send_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/image_view_send_message"
-            bind:tint="@{viewModel.headerScreenModel.writeMessageIconColor}"
+            bind:tint="@{!viewModel.hasConnection ? @string/color_code_disable : viewModel.headerScreenModel.writeMessageIconColor}"
             tools:src="@drawable/ic_arrow_down"
             tools:tint="@color/colorPrimary" />
 

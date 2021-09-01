@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.util.ChatUtils
+import com.desk360.base.util.Utils
 import com.desk360.livechat.data.HeaderChatScreenModel
 import com.desk360.livechat.data.model.chat.Message
 import com.desk360.livechat.data.model.firebase.MessageModel
@@ -14,15 +15,12 @@ import com.desk360.livechat.manager.LiveChatFirebaseHelper
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
-import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import java.io.File
-import java.net.ConnectException
-import java.net.UnknownHostException
 import java.util.*
 
 class ChatViewModel : BaseViewModel() {
@@ -176,10 +174,12 @@ class ChatViewModel : BaseViewModel() {
 
         getReceiverTyping(session?.receiver)
 
+        val avatar = Utils.getAgentAvatar(session?.avatar)
+
         headerScreenModel.value = HeaderChatScreenModel(
             isOffline = false,
-            companyLogo = session?.avatar,
-            isAvatarExists = session?.avatar?.isNotEmpty() == true || LiveChatHelper.settings?.data?.chatbot == true,
+            companyLogo = avatar,
+            isAvatarExists = avatar?.isNotEmpty() == true || LiveChatHelper.settings?.data?.chatbot == true,
             title = if (LiveChatHelper.settings?.data?.chatbot == true) "Chat Bot" else session?.receiver_name,
             initial = getInitial(session?.receiver_name),
             titleColor = LiveChatHelper.settings?.data?.config?.general?.headerTitleColor,
@@ -291,7 +291,8 @@ class ChatViewModel : BaseViewModel() {
                         timerTyping.cancel()
                         val isTyping = snapshot.children.firstOrNull()
                             ?.child("typing")?.value == LiveChatFirebaseHelper.userId
-                        isReceiverTyping.value = (isReceiverTyping.value == true || isTyping) && LiveChatHelper.settings?.data?.config?.chat?.typingStatus == true
+                        isReceiverTyping.value =
+                            (isReceiverTyping.value == true || isTyping) && LiveChatHelper.settings?.data?.config?.chat?.typingStatus == true
                         timerTyping.start()
                     }
 

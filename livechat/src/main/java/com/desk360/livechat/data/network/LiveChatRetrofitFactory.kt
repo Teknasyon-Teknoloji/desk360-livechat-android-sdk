@@ -16,7 +16,7 @@ class LiveChatRetrofitFactory private constructor() {
         chatService = Desk360LiveChat.manager?.domainAddress?.let { domainAddress ->
             createService(
                 LiveChatService::class.java,
-                domainAddress,
+                domainAddress + "api/v1/",
                 Desk360LiveChat.manager?.token
             )
         }

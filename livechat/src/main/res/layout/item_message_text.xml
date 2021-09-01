@@ -56,6 +56,7 @@
                     android:autoLink="web"
                     android:fontFamily="@font/gotham_book"
                     android:gravity="center_vertical"
+                    android:justificationMode="inter_word"
                     android:linksClickable="true"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
@@ -67,6 +68,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     bind:textColor="@{viewModel.messageTextColor}"
                     tools:ignore="RtlSymmetry"
+                    tools:targetApi="o"
                     tools:text="1 sds sd sd sdd d df df df df fdf df s sd sd sd sd sd sd ds "
                     tools:textColor="@color/white" />
 
