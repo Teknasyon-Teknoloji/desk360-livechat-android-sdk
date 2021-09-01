@@ -69,7 +69,7 @@
                     bind:textColor="@{viewModel.messageTextColor}"
                     tools:ignore="RtlSymmetry"
                     tools:targetApi="o"
-                    tools:text="1 sds sd sd sdd d df df df df fdf df s sd sd sd sd sd sd ds "
+                    tools:text="message text"
                     tools:textColor="@color/white" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
