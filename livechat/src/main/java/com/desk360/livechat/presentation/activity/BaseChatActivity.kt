@@ -12,13 +12,10 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.widget.PopupMenu
 import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.util.Utils
@@ -46,7 +43,6 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     }
 
     private var emojiPopup: EmojiPopup? = null
-    var popupMenu: PopupMenu? = null
     private var messageListAdapter: MessageListAdapter? = null
     private var linearLayoutManager: LinearLayoutManager? = null
 
@@ -146,18 +142,6 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     override fun initObservers() {
         viewModel.conversationId = intent.getStringExtra(EXTRA_CONVERSATION_ID)
         viewModel.checkStatus(1)
-
-        viewModel.isOffline.observe(this, { isOffline ->
-            Glide.with(this)
-                .load(if (isOffline) R.drawable.ic_offline else R.drawable.ic_online)
-                .apply(RequestOptions().circleCrop())
-                .into(binding.toolbarHeader.imageViewStatus)
-
-            Glide.with(this)
-                .load(if (isOffline) R.drawable.ic_offline else R.drawable.ic_online)
-                .apply(RequestOptions().circleCrop())
-                .into(binding.toolbarHeader.imageViewStatusBg)
-        })
 
         viewModel.newMessages.observe(this, { messages ->
             messageListAdapter?.submitList(messages)
@@ -326,11 +310,15 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     private fun createEmojiPopup() {
         emojiPopup =
             EmojiPopup.Builder.fromRootView(binding.layoutRoot).setOnEmojiPopupShownListener {
-            }.build(binding.editTextMessage)
+                viewModel.isOpenEmojiPopup.value = true
+            }
+                .setOnEmojiPopupDismissListener {
+                    viewModel.isOpenEmojiPopup.value = false
+                }
+                .build(binding.editTextMessage)
 
         binding.imageViewEmoji.setOnClickListener {
             viewModel.isOpenAttachment.value = false
-            viewModel.isOpenEmojiPopup.value = !emojiPopup?.isShowing!!
             emojiPopup?.toggle()
         }
     }
@@ -389,6 +377,19 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     }
 
     private fun uploadFile(name: String, path: String, fileType: String, mediaType: String) {
+        if (viewModel.hasConnection.value == false) {
+            ChatPopup.Builder(this)
+                .setMessage(LiveChatHelper.settings?.data?.language?.sdkCheckYourConnection)
+                .setStatus(Utils.DialogStatus.WARNING)
+                .setCallbackPositiveButtonClick { dialog ->
+                    dialog.dismiss()
+                }
+                .build()
+                .show()
+
+            return
+        }
+
         val file = File(path)
         viewModel.sendMessageWithAttachment(
             file,

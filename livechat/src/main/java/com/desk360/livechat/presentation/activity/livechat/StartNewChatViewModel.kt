@@ -3,10 +3,10 @@ package com.desk360.livechat.presentation.activity.livechat
 import androidx.lifecycle.MutableLiveData
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.util.ChatUtils
+import com.desk360.base.util.Utils
 import com.desk360.livechat.data.HeaderChatScreenModel
 import com.desk360.livechat.domain.usecase.*
 import com.desk360.livechat.manager.LiveChatFirebaseHelper
-import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 
@@ -18,11 +18,11 @@ class StartNewChatViewModel : BaseViewModel() {
     }
 
     val companyName: MutableLiveData<String> by lazy {
-        MutableLiveData(LiveChatHelper.settings?.data?.config?.general?.brandName)
+        MutableLiveData(Utils.getBrandName())
     }
 
     val companyLogo: MutableLiveData<String> by lazy {
-        MutableLiveData(LiveChatHelper.settings?.data?.config?.general?.brandLogo)
+        MutableLiveData(Utils.getBrandLogo())
     }
 
     val conversations: MutableLiveData<List<HeaderChatScreenModel>> by lazy {
@@ -30,14 +30,6 @@ class StartNewChatViewModel : BaseViewModel() {
     }
 
     init {
-        companyName.value =
-            if (LiveChatHelper.settings?.data?.config?.general?.brandName.isNullOrEmpty()) LiveChatHelper.settings?.data?.applicationName
-            else LiveChatHelper.settings?.data?.config?.general?.brandName
-
-        companyLogo.value =
-            if (LiveChatHelper.settings?.data?.config?.general?.brandLogo.isNullOrEmpty()) LiveChatHelper.settings?.data?.applicationLogo
-            else LiveChatHelper.settings?.data?.config?.general?.brandLogo
-
         getDatas()
     }
 

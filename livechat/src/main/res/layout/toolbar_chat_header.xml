@@ -46,10 +46,8 @@
             android:contentDescription="@null"
             android:paddingStart="20dp"
             android:paddingLeft="20dp"
-            android:paddingTop="10dp"
             android:paddingEnd="30dp"
             android:paddingRight="30dp"
-            android:paddingBottom="10dp"
             android:src="@drawable/ic_three_dot"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_back"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,9 +100,10 @@
 
         <ImageView
             android:id="@+id/image_view_status_bg"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:contentDescription="@null"
+            android:src="@drawable/ic_online"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_user_photo"
             app:layout_constraintEnd_toEndOf="@+id/image_view_user_photo"
             bind:tint="@{model.titleBackgroundColor}"
@@ -113,9 +112,10 @@
 
         <ImageView
             android:id="@+id/image_view_status"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
             android:contentDescription="@null"
+            android:src="@drawable/ic_online"
             app:layout_constraintBottom_toBottomOf="@+id/image_view_status_bg"
             app:layout_constraintEnd_toEndOf="@+id/image_view_status_bg"
             app:layout_constraintStart_toStartOf="@+id/image_view_status_bg"

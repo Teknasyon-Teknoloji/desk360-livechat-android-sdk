@@ -3,6 +3,8 @@ package com.desk360.livechat.data.model.chatsettings
 import com.google.gson.annotations.SerializedName
 
 data class Data(
+    @SerializedName("default_brand_logo") val defaultBrandLogo: String? = null,
+    @SerializedName("default_avatar") val defaultAvatar: String? = null,
     @SerializedName("application_logo") val applicationLogo: String? = null,
     @SerializedName("application_name") val applicationName: String? = null,
     @SerializedName("chatbot") val chatbot: Boolean? = null,

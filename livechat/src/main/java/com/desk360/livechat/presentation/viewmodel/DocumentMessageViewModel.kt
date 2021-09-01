@@ -3,7 +3,6 @@ package com.desk360.livechat.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.desk360.livechat.data.model.chat.Message
 import com.desk360.livechat.data.model.media.getExtension
-import com.desk360.livechat.data.model.media.getShortName
 
 class DocumentMessageViewModel : BaseMediaMessageViewModel() {
 
@@ -18,7 +17,7 @@ class DocumentMessageViewModel : BaseMediaMessageViewModel() {
     override fun handleMessage(message: Message) {
         super.handleMessage(message)
         message.attachments?.firstOrNull()?.let { attachment ->
-            name.value = attachment.getShortName()
+            name.value = attachment.name
             extension.value = attachment.getExtension()
         }
     }

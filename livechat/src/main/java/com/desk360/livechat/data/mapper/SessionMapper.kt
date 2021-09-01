@@ -1,6 +1,7 @@
 package com.desk360.livechat.data.mapper
 
 import com.desk360.base.domain.mapper.FirebaseMapper
+import com.desk360.base.util.Utils
 import com.desk360.livechat.data.HeaderChatScreenModel
 import com.desk360.livechat.data.model.firebase.SessionModel
 import com.desk360.livechat.manager.LiveChatHelper
@@ -12,11 +13,13 @@ class SessionMapper : FirebaseMapper<SessionModel, HeaderChatScreenModel?>() {
         if (from == null)
             return null
 
+        val avatar = Utils.getAgentAvatar(from.avatar)
+
         return HeaderChatScreenModel(
             id = from.receiver.toString(),
             isOffline = from.receiver_status?.toLowerCase(Locale.getDefault()) == "offline",
-            companyLogo = from.avatar,
-            isAvatarExists = from.avatar?.isNotEmpty() == true || LiveChatHelper.settings?.data?.chatbot == true,
+            companyLogo = avatar,
+            isAvatarExists = avatar?.isNotEmpty() == true || LiveChatHelper.settings?.data?.chatbot == true,
             title = if (LiveChatHelper.settings?.data?.chatbot == true) "Chat Bot" else from.receiver_name,
             initial = getInitial(from.receiver_name),
             titleColor = LiveChatHelper.settings?.data?.config?.general?.headerTitleColor,
