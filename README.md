@@ -1,4 +1,4 @@
-# Desk360 Chat Android SDK
+Usage# Desk360 Chat Android SDK
 
  ![img](https://img.shields.io/badge/kotlin-v1.5.20-brightgreen.svg?logoColor=orange&logo=kotlin)   [![](https://jitpack.io/v/Teknasyon-Teknoloji/desk360-livechat-android-sdk.svg)](https://jitpack.io/#Teknasyon-Teknoloji/desk360-livechat-android-sdk)
 
@@ -19,6 +19,7 @@ Desk360 Live Chat SDK is an open source Android library that provides live suppo
 - Ability to integrate Chatbots.
 - Multi-languages support: It supports 40+ languages.
 - Chat Feedback
+- Smart Plug 
 
 # Technical Details
 
@@ -108,6 +109,7 @@ import com.desk360.livechat.manager.LiveChatManager
                 .setDomainAddress("https://your.domain.address/")
                 .setToken("your_private_token")
                 .setLanguageCode("language_code")
+                .setSmartPlug(settings) // User Properties (optional)
                 .build()
 
         Desk360LiveChat.init(activity.applicationContext, liveChatManager) { isActive ->
