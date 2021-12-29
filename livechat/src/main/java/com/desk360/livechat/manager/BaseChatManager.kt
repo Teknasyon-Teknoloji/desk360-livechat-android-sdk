@@ -10,6 +10,7 @@ abstract class BaseChatManager {
     var languageCode: String = ""
     var deviceId: String? = ""
     var pushToken: String? = ""
+    var smartPlug: Map<String,String>? = mapOf()
 
     abstract fun init(context: Context, isActive: (Boolean) -> Unit)
     abstract fun start(context: Context)

@@ -7,5 +7,6 @@ data class SessionRequest(
     val email: String? = "",
     @SerializedName("uuid") var deviceId: String? = "",
     @SerializedName("push_token") var pushToken: String? = "",
-    private val source: String = "Android"
+    private val source: String = "Android",
+    @SerializedName("settings") var settings:Map<String,String>? = mapOf()
 )

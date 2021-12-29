@@ -13,6 +13,7 @@ class OnlineSessionUseCase(private val request: SessionRequest) : BaseUseCase<St
     override fun buildUseCaseObservable(): Observable<String?>? {
         request.deviceId = Desk360LiveChat.manager?.deviceId
         request.pushToken = Desk360LiveChat.manager?.pushToken
+        request.settings = Desk360LiveChat.manager?.smartPlug
 
         return repository.createSession(request)
             ?.doOnNext { response ->
