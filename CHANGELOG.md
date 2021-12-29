@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.7 (2021-12-27)
-## New Features
+### New Features
 
 - Smart plug is create session
 
