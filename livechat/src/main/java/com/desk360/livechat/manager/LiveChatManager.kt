@@ -22,6 +22,7 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         languageCode = builder.languageCode
         deviceId = builder.deviceId
         pushToken = builder.pushToken
+        smartPlug = builder.smartPlug
     }
 
     class Builder {
@@ -32,6 +33,7 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         internal var userEmailAddress: String = ""
         internal var deviceId: String? = ""
         internal var pushToken: String? = ""
+        internal var smartPlug: Map<String,String> = mapOf()
 
         /**
          * token
@@ -87,6 +89,16 @@ class LiveChatManager internal constructor(builder: Builder) : BaseChatManager()
         @NonNull
         fun setPushNotificationToken(pushToken: String?) = apply {
             this.pushToken = pushToken
+        }
+
+        /**
+         * Smart Plug
+         * @param smartPlug Map<Key,Value>
+         * Smart Plug is Live Chat settings configuration for application
+         * @sample deviceId -> TestID
+         */
+        fun setSmartPlug(smartPlug:Map<String,String>) = apply {
+            this.smartPlug = smartPlug
         }
 
         @NonNull

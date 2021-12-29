@@ -12,10 +12,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val settings = mapOf("name" to "Luke", "age" to "23")
+
+
         val liveChatManager = LiveChatManager.Builder()
             .setDomainAddress("https://domain.desk360.com")
             .setToken("token")
             .setLanguageCode("tr")
+            .setSmartPlug(settings)
             .build()
 
         Desk360LiveChat.init(this, liveChatManager) { isActive ->
