@@ -35,7 +35,7 @@ Desk360 Live Chat SDK is an open source Android library that provides live suppo
 
 To integrate Desk360 Live Chat into your Android project , add below parts to your  build.gradlle
 
-```
+```groovy
 allprojects {
 	repositories {
 		...
@@ -46,41 +46,17 @@ allprojects {
 
 Add the dependency
 
-```
+```groovy
 dependencies {
-        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.0.5'
+        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.0.8'
 }
 ```
 
 (Please change latest_release with : https://jitpack.io/#Teknasyon-Teknoloji/desk360-livechat-android-sdk)
 
-Or Maven
-
-**Step 1.** Add the JitPack repository to your build file
-
-```markup
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-```
-
-**Step 2.** Add the dependency
-
-
-```markup
-	<dependency>
-	    <groupId>com.github.Teknasyon-Teknoloji</groupId>
-	    <artifactId>desk360-livechat-android-sdk</artifactId>
-	    <version>Tag</version>
-	</dependency>
-```
-
 **Step 3.** Add File Provider to Your AndroidManifest.xml
 
-```markup
+```xml
 	<application>
 	...
          	<provider
@@ -93,31 +69,41 @@ Or Maven
           	      android:resource="@xml/provider_paths" />
         	 </provider>
 	 ....
-	 </application
+	 </application>
 ```
 
 ### Usage
 
-```
+```kotlin
 import com.desk360.livechat.manager.Desk360LiveChat
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatManager
 ```
 
-```
+```kotlin
+        val settings = mapOf("age" to "23")
+        
         val liveChatManager = LiveChatManager.Builder()
-                .setDomainAddress("https://your.domain.address/")
-                .setToken("your_private_token")
-                .setLanguageCode("language_code")
-                .setSmartPlug(settings) // User Properties (optional)
-                .build()
+            .setDomainAddress("https://domain.desk360.com")
+            .setToken("token")
+            .setLanguageCode("tr")
+            .setUserName("Luke")
+            .setUserEmailAddress("luke@emailadress.com")
+            .setSmartPlug(settings)
+            .build()
 
-        Desk360LiveChat.init(activity.applicationContext, liveChatManager) { isActive ->
-           // your code
+        Desk360LiveChat.init(this, liveChatManager) { isActive ->
+            // You can start Desk360LiveChat after initialization completed
+            btnLiveChat.visibility = if (isActive) 
+                View.VISIBLE
+            else 
+                View.GONE
         }
 
-        // when you want to start Live Chat
-        Desk360LiveChat.start()
+        btnLiveChat.setOnClickListener {
+            // when you want to start Live Chat
+            Desk360LiveChat.start()
+        }
 ```
 
 # ProGuard
@@ -142,6 +128,6 @@ If you have any questions or feature requests, please create an issue.
 
 # Licence
 
-Copyright Teknasyon 2021.
+Copyright Teknasyon 2022.
 
 Desk360 Live Chat SDK is released under the MIT license. See [LICENSE](https://github.com/Teknasyon-Teknoloji/desk360-livechat-android-sdk/blob/master/LICENSE)  for more information.

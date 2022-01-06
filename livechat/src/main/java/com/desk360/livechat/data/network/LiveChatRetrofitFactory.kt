@@ -1,5 +1,6 @@
 package com.desk360.livechat.data.network
 
+import android.net.Uri
 import com.desk360.livechat.BuildConfig
 import com.desk360.livechat.manager.Desk360LiveChat
 import okhttp3.OkHttpClient
@@ -14,9 +15,15 @@ class LiveChatRetrofitFactory private constructor() {
 
     init {
         chatService = Desk360LiveChat.manager?.domainAddress?.let { domainAddress ->
+            val url = Uri.parse(domainAddress)
+                .buildUpon()
+                .appendPath("api")
+                .appendPath("v1")
+                .build()
+                .toString()
             createService(
                 LiveChatService::class.java,
-                domainAddress + "api/v1/",
+                "$url/",
                 Desk360LiveChat.manager?.token
             )
         }
