@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.8 (2022-01-05)
+### Fixes
+- Assets fixed for API 23 and below
+- Fixed to require urls end with slashes,
+
 ## 1.0.7 (2021-12-27)
 ### New Features
 
