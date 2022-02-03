@@ -7,7 +7,7 @@ plugins {
 
 def artifactId = 'desk360-livechat-android-sdk'
 def groupId = 'com.github.Teknasyon-Teknoloji'
-def versionN = "1.0.8"
+def versionN = "1.1.0"
 
 android {
     compileSdkVersion 30

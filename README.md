@@ -19,7 +19,8 @@ Desk360 Live Chat SDK is an open source Android library that provides live suppo
 - Ability to integrate Chatbots.
 - Multi-languages support: It supports 40+ languages.
 - Chat Feedback
-- Smart Plug 
+- Smart Plug
+- Custom Fields
 
 # Technical Details
 
@@ -54,7 +55,7 @@ dependencies {
 
 (Please change latest_release with : https://jitpack.io/#Teknasyon-Teknoloji/desk360-livechat-android-sdk)
 
-**Step 3.** Add File Provider to Your AndroidManifest.xml
+Add File Provider to Your AndroidManifest.xml
 
 ```xml
 	<application>
