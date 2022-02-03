@@ -74,6 +74,7 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
                 }
                 .build().show()
         })
+        viewModel.checkOnlineStatus()
     }
 
     private fun registerReceivers() {
