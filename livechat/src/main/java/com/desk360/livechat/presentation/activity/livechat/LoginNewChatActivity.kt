@@ -1,10 +1,17 @@
 package com.desk360.livechat.presentation.activity.livechat
 
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color.parseColor
+import android.text.Editable
+import android.view.ContextThemeWrapper
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatEditText
 import com.desk360.base.presentation.addTextWatcher
 import com.desk360.base.presentation.setError
 import com.desk360.base.util.Utils
 import com.desk360.livechat.R
+import com.desk360.livechat.data.model.chatsettings.CustomField
 import com.desk360.livechat.databinding.ActivityLoginNewChatBinding
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.activity.BaseActivity
@@ -15,10 +22,17 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
 
     override fun getViewModelClass() = LoginNewChatViewModel::class.java
 
+    private lateinit var customField: LinearLayout
+    private val currentEditTextList = mutableListOf<AppCompatEditText>()
+    private var activeCustomField = mutableListOf<CustomField>()
+
     override fun onResume() {
         super.onResume()
         viewModel.checkStatus()
     }
+
+    private val Int.px get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     override fun initUI() {
         binding.viewModel = viewModel
@@ -32,9 +46,42 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
             onBackPressed()
         }
 
+
+        customField = findViewById(R.id.custom_field_layout)
+        setCustomField()
+
+
         binding.editTextNickname.addTextWatcher(binding.textViewNicknameError)
         binding.editTextMailAddress.addTextWatcher(binding.textViewEmailError)
         binding.editTextMessage.addTextWatcher(binding.textViewMessageError)
+
+    }
+
+    private fun setCustomField() {
+        viewModel.customFieldList?.let { list ->
+            list.forEach { i ->
+                i.isActive?.takeIf { it }.let {
+                    activeCustomField.add(i)
+                    addCustomField(i)
+                }
+            }
+        }
+    }
+
+    private fun addCustomField(field: CustomField) {
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 46.px
+        )
+        layoutParams.setMargins(0, 0, 0, 30)
+        val editText =
+            AppCompatEditText(
+                ContextThemeWrapper(this, R.style.CustomEditText), null, 0
+            ).apply {
+                hint = field.title?.toEditable()
+                tag = field.key
+            }
+        currentEditTextList.add(editText)
+        customField.addView(editText, layoutParams)
     }
 
     override fun initObservers() {
@@ -53,6 +100,12 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
                 })
             }
         })
+        viewModel.screenModel.observe(this, { data ->
+            currentEditTextList.forEach { i ->
+                data?.writeMessageTextColor?.let { i.setTextColor(parseColor(it)) }
+                data?.placeholderColor?.let { i.setHintTextColor(parseColor(it)) }
+            }
+        })
     }
 
     private fun createNewChat() {
@@ -61,6 +114,10 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
             binding.editTextMailAddress.text.toString().trim(),
             binding.editTextMessage.text.toString().trim()
         )
+
+        currentEditTextList.forEachIndexed { i, editText ->
+            activeCustomField[i].value = editText.text.toString()
+        }
 
         if (!viewModel.isNicknameValid()) {
             setError(
@@ -102,6 +159,6 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
             return
         }
 
-        viewModel.createNewChat()
+        viewModel.createNewChat(activeCustomField)
     }
 }

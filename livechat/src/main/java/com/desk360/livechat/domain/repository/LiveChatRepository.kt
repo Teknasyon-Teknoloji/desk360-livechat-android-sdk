@@ -7,7 +7,9 @@ import com.desk360.livechat.data.model.session.EndSessionRequest
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.data.network.LiveChatRetrofitFactory
 import com.desk360.livechat.manager.Desk360LiveChat
+import com.google.gson.JsonObject
 import okhttp3.MultipartBody
+import org.json.JSONObject
 
 class LiveChatRepository private constructor() {
     private val service = LiveChatRetrofitFactory.instance.chatService
@@ -22,7 +24,7 @@ class LiveChatRepository private constructor() {
 
     fun sendChatbotsMessage(request: ChatbotsMessageRequest) = service?.sendChatbotsMessage(request)
 
-    fun sendMessage(request: MessageRequest) = service?.sendMessage(request)
+    fun sendMessage(request: JsonObject) = service?.sendMessage(request)
 
     fun feedback(request: FeedbackRequest) = service?.feedback(request)
 
