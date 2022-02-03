@@ -69,8 +69,7 @@ class ChatPopup(
                     .into(it)
             }
 
-            textViewAction.text =
-                if (action.isNullOrEmpty()) LiveChatHelper.settings?.data?.language?.ok else action
+            textViewAction.text = LiveChatHelper.settings?.data?.language?.ok
             textViewMessage.text = message
             textViewAction.setOnClickListener {
                 if (clickListener != null) {

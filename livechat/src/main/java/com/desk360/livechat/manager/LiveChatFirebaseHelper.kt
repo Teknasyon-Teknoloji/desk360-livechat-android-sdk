@@ -13,16 +13,24 @@ object LiveChatFirebaseHelper {
 
     var database: FirebaseDatabase? = null
         get() {
-            if (field == null)
-                database = Firebase.database(requireNotNull(app))
+            if (field != null)
+                return field
+
+            val fbApp = app ?: return null
+
+            field = Firebase.database(fbApp)
 
             return field
         }
 
     var auth: FirebaseAuth? = null
         get() {
-            if (field == null)
-                auth = Firebase.auth(requireNotNull(app))
+            if (field != null)
+                return field
+
+            val fbapp = app ?: return null
+
+            field = Firebase.auth(fbapp)
 
             return field
         }
