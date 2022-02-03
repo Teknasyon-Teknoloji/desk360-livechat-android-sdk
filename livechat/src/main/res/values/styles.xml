@@ -4,4 +4,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="CustomEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:padding">10dp</item>
+        <item name="android:fontFamily">@font/gotham_light</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:maxLength">50</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:inputType">text</item>
+    </style>
 </resources>
