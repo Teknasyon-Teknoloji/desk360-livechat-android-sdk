@@ -5,7 +5,7 @@ import com.desk360.livechat.manager.LiveChatHelper
 data class HeaderChatScreenModel(
     var id: String = "",
     var isOffline: Boolean = true,
-    val isActivateChatbot: Boolean = LiveChatHelper.settings?.data?.chatbot == true,
+    val isActivateChatbot: Boolean = LiveChatHelper.settings?.data?.config?.chat?.addFileStatus == false,
     val companyLogo: String? = "",
     val isAvatarExists: Boolean? = false,
     val initial: String? = "",
