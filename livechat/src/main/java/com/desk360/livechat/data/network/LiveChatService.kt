@@ -11,8 +11,10 @@ import com.desk360.livechat.data.model.session.EndSessionRequest
 import com.desk360.livechat.data.model.session.EndSessionResponse
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.data.model.session.SessionResponse
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 import okhttp3.MultipartBody
+import org.json.JSONObject
 import retrofit2.http.*
 
 interface LiveChatService {
@@ -36,7 +38,7 @@ interface LiveChatService {
     fun sendChatbotsMessage(@Body body: ChatbotsMessageRequest): Observable<MessageResponse?>
 
     @POST("chat/sdk/message")
-    fun sendMessage(@Body body: MessageRequest): Observable<MessageResponse>
+    fun sendMessage(@Body body: JsonObject): Observable<MessageResponse>
 
     @POST("chat/sdk/feedback")
     fun feedback(@Body body: FeedbackRequest): Observable<FeedbackResponse>

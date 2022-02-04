@@ -2,13 +2,17 @@ package com.desk360.livechat.presentation.viewmodel
 
 import androidx.lifecycle.*
 import com.desk360.livechat.data.model.chatsettings.General
-import com.google.firebase.FirebaseNetworkException
 import com.desk360.livechat.data.model.chatsettings.Language
+import com.desk360.livechat.domain.usecase.IsOfflineUseCase
 import com.desk360.livechat.manager.LiveChatHelper
+import com.google.firebase.FirebaseNetworkException
 import java.net.ConnectException
 import java.net.UnknownHostException
 
 abstract class BaseViewModel : ViewModel(), LifecycleObserver {
+
+    private val isOfflineUseCase = IsOfflineUseCase()
+
     val language: MutableLiveData<Language> by lazy {
         MutableLiveData(LiveChatHelper.settings?.data?.language)
     }
@@ -35,6 +39,16 @@ abstract class BaseViewModel : ViewModel(), LifecycleObserver {
         MutableLiveData(false)
     }
 
+    fun checkOnlineStatus() {
+        isOfflineUseCase.execute(onSuccess = { result ->
+            if (result != null) {
+                LiveChatHelper.isOffline = result
+            }
+        }, onError = {
+
+        })
+    }
+
     fun handleError(th: Throwable?) {
         isRunningProgress.value = false
 
@@ -51,9 +65,7 @@ abstract class BaseViewModel : ViewModel(), LifecycleObserver {
         _hasConnection.value = hasConnection
     }
 
-    open fun pause() {
-
-    }
+    open fun pause() {}
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {

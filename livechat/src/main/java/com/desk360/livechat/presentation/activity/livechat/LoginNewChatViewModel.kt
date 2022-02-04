@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.desk360.livechat.data.HeaderChatScreenModel
 import com.desk360.livechat.data.HeaderCompanyScreenModel
 import com.desk360.livechat.data.model.chatsettings.Chat
+import com.desk360.livechat.data.model.chatsettings.CustomField
 import com.desk360.livechat.data.model.message.MessageRequest
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.domain.usecase.*
@@ -14,6 +15,7 @@ import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 
 class LoginNewChatViewModel : BaseViewModel() {
+
     val isOffline: MutableLiveData<Boolean> by lazy {
         MutableLiveData(LiveChatHelper.isOffline)
     }
@@ -33,6 +35,8 @@ class LoginNewChatViewModel : BaseViewModel() {
     val session: MutableLiveData<SessionRequest> by lazy {
         MutableLiveData()
     }
+
+    val customFieldList get() = LiveChatHelper.settings?.data?.config?.offline?.customFields
 
     private val _isSentOfflineMessage: MutableLiveData<Boolean> = MutableLiveData()
     val isSentOfflineMessage get() = _isSentOfflineMessage
@@ -72,18 +76,18 @@ class LoginNewChatViewModel : BaseViewModel() {
         screenModel.value = LiveChatHelper.settings?.data?.config?.chat
     }
 
-    fun createNewChat() {
+    fun createNewChat(activeCustomField: MutableList<CustomField>) {
         isRunningProgress.value = true
         when {
-            isOffline.value == true -> sendMessage()
+            isOffline.value == true -> sendMessage(activeCustomField)
             LiveChatHelper.settings?.data?.chatbot == true -> createChatbotSession()
             else -> createSession()
         }
     }
 
-    private fun sendMessage() {
+    private fun sendMessage(activeCustomField: MutableList<CustomField>) {
         messageRequest?.let { request ->
-            SendOfflineMessageUseCase(request).execute(onSuccess = { isSuccess ->
+            SendOfflineMessageUseCase(request,activeCustomField).execute(onSuccess = { isSuccess ->
                 isSentOfflineMessage.value = isSuccess
             }, onError = {
                 handleError(it)
