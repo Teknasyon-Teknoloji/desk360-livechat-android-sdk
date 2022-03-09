@@ -2,11 +2,13 @@ package com.desk360.livechat.presentation.activity.livechat
 
 import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.desk360.livechat.manager.LiveChatSharedPrefManager
-import com.desk360.livechat.presentation.activity.BaseActivity
-import com.desk360.livechat.presentation.adapter.ConversationListAdapter
 import com.desk360.livechat.R
 import com.desk360.livechat.databinding.ActivityStartNewChatBinding
+import com.desk360.livechat.manager.LiveChatHelper
+import com.desk360.livechat.manager.LiveChatSharedPrefManager
+import com.desk360.livechat.presentation.activity.BaseActivity
+import com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.CannedResponseActivity
+import com.desk360.livechat.presentation.adapter.ConversationListAdapter
 
 class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewChatViewModel>() {
 
@@ -21,7 +23,13 @@ class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewC
 
         binding.textViewStartNewChatBg.onClick {
             if (LiveChatSharedPrefManager.isNeedNewToken()) {
-                startActivity(Intent(this, LoginNewChatActivity::class.java))
+                if (LiveChatHelper.settings?.data?.isCannedResponse == true) startActivity(
+                    Intent(
+                        this,
+                        CannedResponseActivity::class.java
+                    )
+                )
+                else startActivity(Intent(this, LoginNewChatActivity::class.java))
             } else {
                 startActivity(Intent(this, LiveChatActivity::class.java))
             }
