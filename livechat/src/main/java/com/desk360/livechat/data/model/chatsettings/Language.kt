@@ -162,4 +162,20 @@ class Language {
 
     @SerializedName("your_active_conversation")
     val yourActiveConversation: String? = null
+
+    @SerializedName("canned_response_feedback_button_bad")
+    val crFeedBackButtonBad:String? = null
+
+    @SerializedName("canned_response_feedback_description")
+    val crFeedBackDesc:String? = null
+
+    @SerializedName("canned_response_feedback_title")
+    val crFeedBackTitle:String? = null
+
+    @SerializedName("canned_response_feedback_success_title")
+    val crFeedBackSuccessTitle:String? = null
+
+    @SerializedName("canned_response_feedback_button_good")
+    val crFeedBackButtonGood:String? = null
+
 }

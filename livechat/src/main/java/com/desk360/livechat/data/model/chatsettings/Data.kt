@@ -1,5 +1,6 @@
 package com.desk360.livechat.data.model.chatsettings
 
+import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponse
 import com.google.gson.annotations.SerializedName
 
 data class Data(
@@ -13,5 +14,7 @@ data class Data(
     @SerializedName("config") val config: Config? = null,
     @SerializedName("firebase_config") val firebaseConfig: FirebaseConfig? = null,
     @SerializedName("language") val language: Language? = null,
-    @SerializedName("triggers") val triggers: List<Trigger>? = null
+    @SerializedName("triggers") val triggers: List<Trigger>? = null,
+    @SerializedName("canned_response") val cannedResponse: ArrayList<CannedResponse>? = null,
+    @SerializedName("is_active_canned_response") val isCannedResponse: Boolean? = null
 )

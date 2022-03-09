@@ -7,10 +7,14 @@ import com.desk360.livechat.domain.repository.LiveChatRepository
 import com.desk360.livechat.manager.LiveChatHelper
 import io.reactivex.Observable
 
-class ConfigUseCase(private val languageCode: String?) : BaseUseCase<ChatSettingsResponse>() {
+class ConfigUseCase(private val languageCode: String?, private val source: String? = null) :
+    BaseUseCase<ChatSettingsResponse>() {
 
     override fun buildUseCaseObservable(): Observable<ChatSettingsResponse>? {
-        return LiveChatRepository.instance.getConfig(languageCode ?: Utils.DEFAULT_LANGUAGE_CODE)
+        return LiveChatRepository.instance.getConfig(
+            languageCode ?: Utils.DEFAULT_LANGUAGE_CODE,
+            source ?: Utils.DEFAULT_SOURCE
+        )
             ?.doOnNext { response ->
                 LiveChatHelper.settings = response
             }
