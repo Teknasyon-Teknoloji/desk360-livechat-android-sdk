@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.desk360.livechat.data.HeaderCompanyScreenModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        bind:background="@{model.titleBackgroundColor}"
+        tools:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/image_view_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
+            bind:tint="@{model.titleColor}" />
+
+        <ImageView
+            android:id="@+id/image_view_user_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_view_back"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:src="@{model.logo}"
+            tools:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/gotham_medium"
+            android:singleLine="true"
+            android:text="@{model.title}"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_user_photo"
+
+            app:layout_constraintEnd_toStartOf="@+id/image_view_menu"
+            app:layout_constraintStart_toEndOf="@+id/image_view_user_photo"
+            app:layout_constraintTop_toTopOf="@+id/image_view_user_photo"
+            tools:text="Desk360" />
+
+        <ImageView
+            android:id="@+id/image_view_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingEnd="30dp"
+            android:paddingRight="30dp"
+            android:src="@drawable/ic_three_dot"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image_view_back"
+            bind:tint="@{model.titleColor}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
