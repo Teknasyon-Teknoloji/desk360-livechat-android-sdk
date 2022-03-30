@@ -21,6 +21,8 @@ Desk360 Live Chat SDK is an open source Android library that provides live suppo
 - Chat Feedback
 - Smart Plug
 - Custom Fields
+- Auto Login
+- Canned Response
 
 # Technical Details
 
@@ -43,6 +45,13 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 	}
 }
+```
+
+To enable the usage of data binding in your Android application, add the following snippet to the app/build.gradle file.
+```
+ android {
+     dataBinding.enabled = true
+     }
 ```
 
 Add the dependency

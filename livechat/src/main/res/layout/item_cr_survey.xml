@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:gravity="start"
+        tools:gravity="start">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_message_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_incoming_message_row"
+                android:minWidth="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:backgroundTint="@{viewModel.backgroundColor}"
+                tools:background="@drawable/bg_incoming_message_row">
+
+                <TextView
+                    android:id="@+id/text_view_content_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:autoLink="web"
+                    android:fontFamily="@font/gotham_book"
+                    android:gravity="center_vertical"
+                    android:justificationMode="inter_word"
+                    android:padding="8dp"
+                    android:text="@{viewModel.language.crFeedBackTitle}"
+                    android:textColorLink="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                    tools:ignore="RtlSymmetry"
+                    tools:targetApi="o"
+                    tools:text="Değerlendirme Anketi"
+                    tools:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/text_view_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:autoLink="web"
+                    android:fontFamily="@font/gotham_book"
+                    android:gravity="center_vertical"
+                    android:justificationMode="inter_word"
+                    android:padding="8dp"
+                    android:text="@{viewModel.language.crFeedBackDesc}"
+                    android:textColorLink="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_content_title"
+                    bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                    tools:ignore="RtlSymmetry"
+                    tools:targetApi="o"
+                    tools:text="Değerlendirme Anketi ..Görüşmeyi nasıl değerlendirirsiniz?Görüşmeyi nasıl değerlendirirsiniz?"
+                    tools:textColor="@color/white" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_button_panel_one"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_survey_button_one"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/survey_button_barrier"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_content">
+
+                    <ImageView
+                        android:id="@+id/img_button_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_survey_good"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_survey_one"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_survey_one"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/btn_survey_one" />
+
+                    <TextView
+                        android:id="@+id/btn_survey_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham_medium"
+                        android:text="@{viewModel.language.crFeedBackButtonGood}"
+                        bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="GOOD" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/survey_button_barrier"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="#e5e8ed"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_button_panel_two"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/cl_button_panel_two" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_button_panel_two"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_survey_button_two"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/survey_button_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_content">
+
+                    <ImageView
+                        android:id="@+id/img_button_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:src="@drawable/ic_survey_bad"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_survey_two"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_survey_two"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/btn_survey_two" />
+
+                    <TextView
+                        android:id="@+id/btn_survey_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham_medium"
+                        android:text="@{viewModel.language.crFeedBackButtonBad}"
+                        bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="BAD" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>

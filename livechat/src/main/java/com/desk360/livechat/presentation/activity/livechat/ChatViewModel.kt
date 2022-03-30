@@ -75,10 +75,10 @@ class ChatViewModel : BaseViewModel() {
 
     private var session: SessionModel? = null
 
-    var conversationId: String? = null
+    var conversationIntentId: String? = null
 
     private fun getMessages() {
-        conversationId?.let {
+        conversationIntentId?.let {
             GetMessagesUseCase(it).execute(onSuccess = { list ->
                 _newMessages.value = list
             }, onError = {
@@ -217,7 +217,7 @@ class ChatViewModel : BaseViewModel() {
             status = "sent"
         )
 
-        conversationId?.let {
+        conversationIntentId?.let {
             AddMessageUseCase(
                 it,
                 messageModel,
@@ -255,7 +255,7 @@ class ChatViewModel : BaseViewModel() {
             status = "sent"
         )
 
-        conversationId?.let { conversationId ->
+        conversationIntentId?.let { conversationId ->
             UploadMediaUseCase(
                 conversationId,
                 messageModel,
@@ -326,7 +326,7 @@ class ChatViewModel : BaseViewModel() {
     }
 
     fun endSession() {
-        EndSessionUseCase(conversationId = conversationId).execute(
+        EndSessionUseCase(conversationId = conversationIntentId).execute(
             onSuccess = { isSuccess ->
                 _isEndSessionSuccessful.value = isSuccess
             },

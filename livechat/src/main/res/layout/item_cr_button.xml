@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:gravity="center">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_cr_button"
+            bind:backgroundTint="@{viewModel.isSelected? viewModel.messageTextColor: viewModel.backgroundColor}"
+            android:padding="1dp">
+
+            <TextView
+                android:id="@+id/text_view_login_bg"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_cr_button"
+                android:gravity="center"
+                android:fontFamily="@font/gotham_medium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                bind:backgroundTint="@{viewModel.backgroundColor}"
+                tools:backgroundTint="@color/colorPrimary"
+                tools:ignore="UseCompatTextViewDrawableXml"
+                tools:text="BURAK OCAK BURAK OCAK" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

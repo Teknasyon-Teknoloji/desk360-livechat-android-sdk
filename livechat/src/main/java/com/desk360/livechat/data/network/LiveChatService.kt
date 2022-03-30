@@ -5,16 +5,15 @@ import com.desk360.livechat.data.model.feedback.FeedbackRequest
 import com.desk360.livechat.data.model.feedback.FeedbackResponse
 import com.desk360.livechat.data.model.media.UploadMediaResponse
 import com.desk360.livechat.data.model.message.ChatbotsMessageRequest
-import com.desk360.livechat.data.model.message.MessageRequest
 import com.desk360.livechat.data.model.message.MessageResponse
 import com.desk360.livechat.data.model.session.EndSessionRequest
 import com.desk360.livechat.data.model.session.EndSessionResponse
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.data.model.session.SessionResponse
+import com.desk360.livechat.data.model.cannedresponse.request.CRRequest
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import okhttp3.MultipartBody
-import org.json.JSONObject
 import retrofit2.http.*
 
 interface LiveChatService {
@@ -22,7 +21,8 @@ interface LiveChatService {
     @GET("chat/sdk/setting")
     fun getConfig(
         @Query("language") languageCode: String,
-        @Query("token") token: String?
+        @Query("token") token: String?,
+        @Query("source") source:String?
     ): Observable<ChatSettingsResponse>
 
     @POST("chat/sdk/session")
@@ -48,4 +48,7 @@ interface LiveChatService {
     fun uploadMedia(
         @Part attachment: MultipartBody.Part
     ): Observable<UploadMediaResponse>
+
+    @POST("chat/sdk/canned-response")
+    fun cannedResponse(@Body body: CRRequest): Observable<Unit>
 }

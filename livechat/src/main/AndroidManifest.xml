@@ -16,6 +16,13 @@
         tools:targetApi="n">
 
         <activity
+            android:name=".presentation.activity.livechat.CannedResponseActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
             android:name="com.desk360.livechat.presentation.activity.livechat.SentTranscriptionChatActivity"
             android:exported="false"
             android:launchMode="singleTop"

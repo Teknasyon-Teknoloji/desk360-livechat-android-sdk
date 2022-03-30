@@ -13,6 +13,8 @@ import java.net.UnknownHostException
 object Utils {
     const val DEFAULT_LANGUAGE_CODE = "en"
 
+    const val DEFAULT_SOURCE = "Android"
+
     fun isEmailValid(email: String) = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
     fun handleError(context: Context, th: Throwable) {

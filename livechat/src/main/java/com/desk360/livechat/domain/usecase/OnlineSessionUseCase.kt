@@ -5,6 +5,7 @@ import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.domain.repository.LiveChatRepository
 import com.desk360.livechat.manager.Desk360LiveChat
+import com.desk360.livechat.manager.CannedResponseHelper
 import io.reactivex.Observable
 
 class OnlineSessionUseCase(private val request: SessionRequest) : BaseUseCase<String?>() {
@@ -14,7 +15,9 @@ class OnlineSessionUseCase(private val request: SessionRequest) : BaseUseCase<St
         request.deviceId = Desk360LiveChat.manager?.deviceId
         request.pushToken = Desk360LiveChat.manager?.pushToken
         request.settings = Desk360LiveChat.manager?.smartPlug
-
+        CannedResponseHelper.payloadLogData.takeIf { it.isNotEmpty() }?.let {
+            request.payload = it
+        }
         return repository.createSession(request)
             ?.doOnNext { response ->
                 SharedPreferencesManager.setUser(request.name, request.email)
