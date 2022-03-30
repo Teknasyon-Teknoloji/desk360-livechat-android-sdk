@@ -1,27 +1,26 @@
 package com.desk360.livechat.presentation.activity.livechat
 
 import androidx.lifecycle.MutableLiveData
-import com.desk360.livechat.data.HeaderChatScreenModel
 import com.desk360.livechat.data.HeaderCompanyScreenModel
 import com.desk360.livechat.data.model.chatsettings.Chat
 import com.desk360.livechat.data.model.chatsettings.CustomField
 import com.desk360.livechat.data.model.message.MessageRequest
 import com.desk360.livechat.data.model.session.SessionRequest
-import com.desk360.livechat.domain.usecase.*
+import com.desk360.livechat.domain.usecase.ChatBotSessionUseCase
+import com.desk360.livechat.domain.usecase.GetSessionUseCase
+import com.desk360.livechat.domain.usecase.IsOfflineUseCase
+import com.desk360.livechat.domain.usecase.SendOfflineMessageUseCase
 import com.desk360.livechat.manager.Desk360LiveChat
 import com.desk360.livechat.manager.LiveChatFirebaseHelper
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
+import com.desk360.livechat.manager.CannedResponseHelper
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 
 class LoginNewChatViewModel : BaseViewModel() {
 
     val isOffline: MutableLiveData<Boolean> by lazy {
         MutableLiveData(LiveChatHelper.isOffline)
-    }
-
-    val conversationId: MutableLiveData<String> by lazy {
-        MutableLiveData()
     }
 
     val headerCompanyScreenModel: MutableLiveData<HeaderCompanyScreenModel> by lazy {
@@ -43,6 +42,7 @@ class LoginNewChatViewModel : BaseViewModel() {
 
     var messageRequest: MessageRequest? = null
     var getSessionUseCase: GetSessionUseCase? = null
+    var isPathId: Boolean = false
 
     init {
         getSessionUseCase = GetSessionUseCase()
@@ -81,27 +81,16 @@ class LoginNewChatViewModel : BaseViewModel() {
         when {
             isOffline.value == true -> sendMessage(activeCustomField)
             LiveChatHelper.settings?.data?.chatbot == true -> createChatbotSession()
-            else -> createSession()
+            else -> if (isPathId) autoLogin(CannedResponseHelper.getPathId(), session.value)
+            else autoLogin(null, session.value)
         }
     }
 
     private fun sendMessage(activeCustomField: MutableList<CustomField>) {
         messageRequest?.let { request ->
-            SendOfflineMessageUseCase(request,activeCustomField).execute(onSuccess = { isSuccess ->
+            SendOfflineMessageUseCase(request, activeCustomField).execute(onSuccess = { isSuccess ->
                 isSentOfflineMessage.value = isSuccess
-            }, onError = {
-                handleError(it)
-            })
-        }
-    }
-
-    private fun createSession() {
-        LiveChatSharedPrefManager.isChatBot = false
-
-        session.value?.let { request ->
-            OnlineSessionUseCase(request).execute(onSuccess = { token ->
-                _token.value = token
-                singInWithToken(token)
+                CannedResponseHelper.clearPayload()
             }, onError = {
                 handleError(it)
             })
@@ -120,45 +109,6 @@ class LoginNewChatViewModel : BaseViewModel() {
         }
     }
 
-    private fun singInWithToken(token: String?) {
-        token?.let {
-            SignInWithTokenUseCase.execute(token).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    LiveChatFirebaseHelper.auth?.currentUser?.uid?.let { uid ->
-                        getSession()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getSession() {
-        getSessionUseCase = GetSessionUseCase()
-        getSessionUseCase?.execute({ result ->
-            if (result == null) {
-                DeleteConversationUseCase().execute(onSuccess = {
-                    isEndedSession.value = true
-                }, onError = {
-                    handleError(it)
-                    isEndedSession.value = false
-                })
-            } else {
-                LiveChatSharedPrefManager.agent = result
-                createConversation(result)
-            }
-        }, {
-
-        })
-    }
-
-    private fun createConversation(result: HeaderChatScreenModel) {
-        CreateConversationUseCase(result).execute(onSuccess = { id ->
-            conversationId.value = id
-        }, onError = {
-            handleError(it)
-        })
-    }
-
     fun isNicknameValid() = session.value?.name?.isNotEmpty() == true
     fun isEmailAddressValid() = session.value?.email?.isNotEmpty() == true
     fun isMessageValid() =
@@ -170,7 +120,15 @@ class LoginNewChatViewModel : BaseViewModel() {
             email = emailAddress.trim()
         )
 
-        messageRequest = MessageRequest(name = name, email = emailAddress, message = message)
+        messageRequest = if (isPathId) {
+            MessageRequest(
+                name = name,
+                email = emailAddress,
+                message = message,
+                pathId = CannedResponseHelper.getPathId(),
+            )
+        } else MessageRequest(name = name, email = emailAddress, message = message)
+
     }
 
     override fun pause() {
