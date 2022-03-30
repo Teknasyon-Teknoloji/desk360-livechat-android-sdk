@@ -4,14 +4,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel.CannedResponseViewModel" />
+            type="com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.activity.livechat.cannedresponse.presentation.CannedResponseActivity">
+        tools:context=".presentation.activity.livechat.CannedResponseActivity">
 
         <include
             android:id="@+id/toolbar_canned_header"

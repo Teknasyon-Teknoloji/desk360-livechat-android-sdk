@@ -12,7 +12,7 @@
 
         <variable
             name="viewModel"
-            type="com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel.CannedResponseViewModel" />
+            type="com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel" />
 
     </data>
 

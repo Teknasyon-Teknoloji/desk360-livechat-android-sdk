@@ -16,7 +16,7 @@
 
         <variable
             name="viewModel"
-            type="com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel.CannedResponseViewModel" />
+            type="com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel" />
 
     </data>
 
@@ -24,14 +24,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
+        bind:marginToMine="@{viewModel.isMine}"
         tools:gravity="start">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_row"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
             android:padding="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,52 +54,41 @@
                     android:id="@+id/text_view_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoLink="web"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:fontFamily="@font/gotham_book"
                     android:gravity="center_vertical"
-                    android:justificationMode="inter_word"
                     android:linksClickable="true"
-                    android:paddingTop="1dp"
-                    android:paddingBottom="1dp"
-                    android:textSize="16sp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
                     tools:ignore="RtlSymmetry"
                     tools:targetApi="o"
-                    tools:text="ocak burak ocak burak ocak burak ocak"
+                    tools:text="burak ocak"
                     tools:textColor="@color/white" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_time"
+                <TextView
+                    android:id="@+id/text_view_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
+                    android:fontFamily="@font/gotham_medium"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/text_view_content"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_content">
-
-                    <TextView
-                        android:id="@+id/text_view_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/gotham_medium"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
-                        tools:ignore="SmallSp"
-                        tools:text="6:22"
-                        tools:textColor="@color/white" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@id/text_view_content"
+                    bind:textColor="@{viewModel.isMine?@color/white :@color/black}"
+                    tools:ignore="SmallSp"
+                    tools:text="6:22"
+                    tools:textColor="@color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>

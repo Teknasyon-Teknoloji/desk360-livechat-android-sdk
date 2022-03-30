@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:gravity="@{viewModel.isMine ? gravity.END : gravity.START}"
         bind:marginToMine="@{viewModel.isMine}"
-        tools:gravity="end">
+        tools:gravity="start">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_row"
@@ -69,7 +69,7 @@
                     bind:textColor="@{viewModel.messageTextColor}"
                     tools:ignore="RtlSymmetry"
                     tools:targetApi="o"
-                    tools:text="message text"
+                    tools:text="burak ocak"
                     tools:textColor="@color/white" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
