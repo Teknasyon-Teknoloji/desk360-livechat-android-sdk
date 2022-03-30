@@ -45,6 +45,13 @@ allprojects {
 }
 ```
 
+To enable the usage of data binding in your Android application, add the following snippet to the app/build.gradle file.
+```
+ android {
+     dataBinding.enabled = true
+     }
+```
+
 Add the dependency
 
 ```groovy
