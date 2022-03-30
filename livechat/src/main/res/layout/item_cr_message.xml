@@ -37,6 +37,7 @@
                 android:id="@+id/layout_message_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
                 android:minWidth="100dp"
                 android:paddingStart="15dp"
