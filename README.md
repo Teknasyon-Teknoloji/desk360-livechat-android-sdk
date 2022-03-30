@@ -21,6 +21,8 @@ Desk360 Live Chat SDK is an open source Android library that provides live suppo
 - Chat Feedback
 - Smart Plug
 - Custom Fields
+- Auto Login
+- Canned Response
 
 # Technical Details
 
