@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.0"
+- Fixed online offline request timing.
+- Add auto login concept
+- Add canned response feature.
+- Fixed general helper bug fix
+- General refactor.
+
+
 ## 1.1.0"
 - Fixed to add file option for online chat case.
 - Add custom fields for offline chat and dynamic offline chat screen
