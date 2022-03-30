@@ -7,7 +7,7 @@ import com.desk360.livechat.databinding.ActivityStartNewChatBinding
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.activity.BaseActivity
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.CannedResponseActivity
+import com.desk360.livechat.presentation.activity.BaseChatActivity
 import com.desk360.livechat.presentation.adapter.ConversationListAdapter
 
 class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewChatViewModel>() {
@@ -29,6 +29,7 @@ class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewC
                         CannedResponseActivity::class.java
                     )
                 )
+                else if (!LiveChatHelper.isOffline && viewModel.isAutoLoginControl()) viewModel.autoLogin()
                 else startActivity(Intent(this, LoginNewChatActivity::class.java))
             } else {
                 startActivity(Intent(this, LiveChatActivity::class.java))
@@ -52,8 +53,17 @@ class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewC
     }
 
     override fun initObservers() {
+
         viewModel.conversations.observe(this, {
             conversationListAdapter?.submitList(it)
+        })
+
+        viewModel.conversationDeskId.observe(this, { conversationId ->
+            if (conversationId.isNotEmpty()) {
+                startActivity(Intent(this, LiveChatActivity::class.java).apply {
+                    putExtra(BaseChatActivity.EXTRA_CONVERSATION_ID, conversationId)
+                })
+            }
         })
     }
 

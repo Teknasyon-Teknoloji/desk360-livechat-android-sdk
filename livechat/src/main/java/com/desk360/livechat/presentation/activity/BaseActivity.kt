@@ -14,14 +14,16 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
-import com.jakewharton.rxbinding2.view.RxView
+import com.desk360.base.domain.usecase.AutoLoginTasksImpl
+import com.desk360.base.presentation.component.CustomProgressDialog
+import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.receiver.ConnectivityBroadcastReceiver
 import com.desk360.base.util.Utils
-import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.livechat.BindingExt.binding
 import com.desk360.livechat.R
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.net.ConnectException
@@ -38,6 +40,8 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
     }
 
     val compositeDisposable = CompositeDisposable()
+
+    val customProgressDialog = CustomProgressDialog()
 
     @LayoutRes
     abstract fun getLayoutResId(): Int
@@ -74,6 +78,15 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
                 }
                 .build().show()
         })
+
+        viewModel.isProgressDialogState.observe(this, {
+            when (it) {
+                AutoLoginTasksImpl.LoginProgressDialogState.START -> customProgressDialog.show(this,"Connecting...")
+                AutoLoginTasksImpl.LoginProgressDialogState.STOP -> customProgressDialog.dialog.hideDialog()
+                else -> {}
+            }
+        })
+
         viewModel.checkOnlineStatus()
     }
 

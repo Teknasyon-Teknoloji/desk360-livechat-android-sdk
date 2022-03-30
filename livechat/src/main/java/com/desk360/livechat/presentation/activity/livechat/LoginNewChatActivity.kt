@@ -18,6 +18,10 @@ import com.desk360.livechat.presentation.activity.BaseActivity
 import com.desk360.livechat.presentation.activity.BaseChatActivity
 
 class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewChatViewModel>() {
+
+    companion object {
+        const val EXTRA_PATH_ID = "extra_conversation_id"
+    }
     override fun getLayoutResId() = R.layout.activity_login_new_chat
 
     override fun getViewModelClass() = LoginNewChatViewModel::class.java
@@ -37,6 +41,8 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
     override fun initUI() {
         binding.viewModel = viewModel
 
+        viewModel.isPathId =  intent.getBooleanExtra(EXTRA_PATH_ID,false)
+
         binding.textViewLoginBg.onClick {
             createNewChat()
         }
@@ -54,7 +60,6 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
         binding.editTextNickname.addTextWatcher(binding.textViewNicknameError)
         binding.editTextMailAddress.addTextWatcher(binding.textViewEmailError)
         binding.editTextMessage.addTextWatcher(binding.textViewMessageError)
-
     }
 
     private fun setCustomField() {
@@ -92,7 +97,7 @@ class LoginNewChatActivity : BaseActivity<ActivityLoginNewChatBinding, LoginNewC
             }
         })
 
-        viewModel.conversationId.observe(this, { conversationId ->
+        viewModel.conversationDeskId.observe(this, { conversationId ->
             if (conversationId.isNotEmpty()) {
                 finish()
                 startActivity(Intent(this, LiveChatActivity::class.java).apply {

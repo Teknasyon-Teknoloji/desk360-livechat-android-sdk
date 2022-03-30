@@ -4,6 +4,8 @@ import android.content.Intent
 import com.desk360.livechat.databinding.ActivityFeedbackChatBinding
 import com.desk360.livechat.presentation.activity.BaseActivity
 import com.desk360.livechat.R
+import com.desk360.livechat.manager.LiveChatHelper
+import com.desk360.livechat.presentation.activity.BaseChatActivity
 
 class FeedbackChatActivity : BaseActivity<ActivityFeedbackChatBinding, FeedbackChatViewModel>() {
     override fun getLayoutResId() = R.layout.activity_feedback_chat
@@ -24,8 +26,12 @@ class FeedbackChatActivity : BaseActivity<ActivityFeedbackChatBinding, FeedbackC
         binding.textViewStartNewChatBg.setOnClickListener {
             if (viewModel.isRunningProgress.value != true) {
                 viewModel.isRunningProgress.value = false
-                startActivity(Intent(this, LoginNewChatActivity::class.java))
-                finish()
+                if (viewModel.isAutoLoginControl() && !LiveChatHelper.isOffline)
+                    viewModel.autoLogin()
+                else {
+                    startActivity(Intent(this, LoginNewChatActivity::class.java))
+                    finish()
+                }
             }
         }
 
@@ -35,6 +41,13 @@ class FeedbackChatActivity : BaseActivity<ActivityFeedbackChatBinding, FeedbackC
     }
 
     override fun initObservers() {
-
+        viewModel.conversationDeskId.observe(this, { conversationId ->
+            if (conversationId.isNotEmpty()) {
+                finish()
+                startActivity(Intent(this, LiveChatActivity::class.java).apply {
+                    putExtra(BaseChatActivity.EXTRA_CONVERSATION_ID, conversationId)
+                })
+            }
+        })
     }
 }

@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.desk360.base.domain.usecase.AutoLoginTasksImpl
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.util.Utils
@@ -140,7 +141,8 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     }
 
     override fun initObservers() {
-        viewModel.conversationId = intent.getStringExtra(EXTRA_CONVERSATION_ID)
+        viewModel.conversationIntentId = intent.getStringExtra(EXTRA_CONVERSATION_ID)
+
         viewModel.checkStatus(1)
 
         viewModel.newMessages.observe(this, { messages ->
