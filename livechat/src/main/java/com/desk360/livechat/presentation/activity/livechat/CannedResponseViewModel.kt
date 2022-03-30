@@ -239,29 +239,8 @@ class CannedResponseViewModel : BaseViewModel() {
             val message: CannedActionType.CRMessage? = content?.let { c ->
                 CannedActionType.CRMessage(null, c, true)
             }
-            // ofline ve online case' e geçiş
             message?.let { bindEntity.add(it) }
             _newCannedResponse.value = bindEntity
-            /*if (type == ACTION_SURVEY) {
-                LiveChatHelper.settings?.data?.language?.crFeedBackTitle?.let {
-                    bindEntity.add(
-                        CannedActionType.CRMessage(
-                            null,
-                            it, true
-                        )
-                    )
-                    _newCannedResponse.value = bindEntity
-                }
-            } else {
-                val content = CannedResponseObject.getMenuButton(type)?.content
-                val message: CannedActionType.CRMessage? = content?.let { c ->
-                    CannedActionType.CRMessage(null, c, true)
-                }
-                message?.let { bindEntity.add(it) }
-                _newCannedResponse.value = bindEntity
-            }*/
         }
     }
-
-    // survey click button action feedback request. After back.
 }
