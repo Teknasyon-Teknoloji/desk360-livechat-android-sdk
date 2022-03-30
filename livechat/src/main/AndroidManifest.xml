@@ -16,7 +16,7 @@
         tools:targetApi="n">
 
         <activity
-            android:name=".presentation.activity.livechat.cannedresponse.presentation.CannedResponseActivity"
+            android:name=".presentation.activity.livechat.CannedResponseActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"

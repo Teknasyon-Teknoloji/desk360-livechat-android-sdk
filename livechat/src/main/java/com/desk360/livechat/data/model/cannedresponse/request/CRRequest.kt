@@ -1,6 +1,6 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.request
+package com.desk360.livechat.data.model.cannedresponse.request
 
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model.CannedPayloadModel
+import com.desk360.livechat.data.model.cannedresponse.CannedPayloadModel
 import com.google.gson.annotations.SerializedName
 
 data class CRRequest(

@@ -1,21 +1,20 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.data
+package com.desk360.livechat.manager
 
 import com.desk360.base.util.DateUtils
-import com.desk360.livechat.manager.LiveChatHelper
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model.CannedPayloadModel
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponse
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponseButton
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponseCloseMenu
+import com.desk360.livechat.data.model.cannedresponse.CannedPayloadModel
+import com.desk360.livechat.data.model.cannedresponse.response.CannedResponse
+import com.desk360.livechat.data.model.cannedresponse.response.CannedResponseButton
+import com.desk360.livechat.data.model.cannedresponse.response.CannedResponseCloseMenu
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-object CannedResponseObject {
+object CannedResponseHelper {
 
     val cannedResponseModel = LiveChatHelper.settings?.data?.cannedResponse
-    var payloadLogData:ArrayList<CannedPayloadModel> = arrayListOf()
+    var payloadLogData: ArrayList<CannedPayloadModel> = arrayListOf()
 
-    fun getPathId(): Int  = payloadLogData[payloadLogData.size-1].id
+    fun getPathId(): Int? = getButton(payloadLogData[payloadLogData.size - 1].id)?.actionableId
     fun clearPayload() = payloadLogData.clear()
 
     private var cannedReplyButtons: ArrayList<CannedResponseButton> = arrayListOf()
@@ -56,7 +55,7 @@ object CannedResponseObject {
         } ?: return null
     }
 
-    fun getMenuButton(type:String):CannedResponseCloseMenu? {
+    fun getMenuButton(type: String): CannedResponseCloseMenu? {
         cannedResponseMenuButton.find { it.actionableType == type }?.let { data ->
             return data
         } ?: return null
@@ -68,6 +67,6 @@ object CannedResponseObject {
     }
 
     fun addPayloadLog(id: Int) {
-        payloadLogData.add(CannedPayloadModel(id,DateUtils.now()))
+        payloadLogData.add(CannedPayloadModel(id, DateUtils.now()))
     }
 }

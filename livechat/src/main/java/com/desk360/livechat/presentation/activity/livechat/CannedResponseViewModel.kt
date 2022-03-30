@@ -1,24 +1,23 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel
+package com.desk360.livechat.presentation.activity.livechat
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.desk360.livechat.data.HeaderCompanyScreenModel
 import com.desk360.livechat.data.model.feedback.FeedbackRequest
 import com.desk360.livechat.domain.usecase.FeedbackUseCase
 import com.desk360.livechat.manager.LiveChatHelper
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.CannedResponseObject
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model.CannedActionType
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model.CannedScreenType
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.request.CRRequest
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponse
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.GroupedUnits
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.domain.CannedResponseUseCase
+import com.desk360.livechat.manager.CannedResponseHelper
+import com.desk360.livechat.data.model.cannedresponse.CannedActionType
+import com.desk360.livechat.data.model.cannedresponse.CannedScreenType
+import com.desk360.livechat.data.model.cannedresponse.request.CRRequest
+import com.desk360.livechat.data.model.cannedresponse.response.CannedResponse
+import com.desk360.livechat.data.model.cannedresponse.response.GroupedUnits
+import com.desk360.livechat.domain.usecase.CannedResponseUseCase
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
 
-abstract class BaseCannedBindViewModel : BaseViewModel() {
-
+class CannedResponseViewModel : BaseViewModel() {
 
     companion object {
         const val SURVEY = "Close_and_survey"
@@ -31,6 +30,10 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
         const val ACTION_SURVEY = "Close_and_survey"
         const val ACTION_LIVE_HELP = "Live_help"
         const val ACTION_START_PATH = "Return_start_path"
+    }
+
+    val headerCompanyScreenModel: MutableLiveData<HeaderCompanyScreenModel> by lazy {
+        MutableLiveData(HeaderCompanyScreenModel())
     }
 
     val isMine: MutableLiveData<Boolean> by lazy {
@@ -57,23 +60,22 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
         MutableLiveData(null)
     }
 
-
     private val _newCannedResponse: MutableLiveData<MutableList<CannedActionType>> =
         MutableLiveData()
     val newCannedResponse get() = _newCannedResponse
 
-    private val _newCannedResponse1: MutableLiveData<MutableList<CannedActionType>> =
+    private val _startCannedResponse: MutableLiveData<MutableList<CannedActionType>> =
         MutableLiveData()
-    val newCannedResponse1 get() = _newCannedResponse1
+    val startCannedResponse get() = _startCannedResponse
 
-    private val cannedResponseModel = CannedResponseObject.cannedResponseModel
+    private val cannedResponseModel = CannedResponseHelper.cannedResponseModel
 
     private val bindEntity: MutableList<CannedActionType> = mutableListOf()
 
     fun clearBindEntity() = bindEntity.clear()
 
     fun startCannedResponse() {
-        CannedResponseObject.modelInitiate()
+        CannedResponseHelper.modelInitiate()
         cannedResponseModel?.forEach { data ->
             if (data.isStart == 1) {
                 getHandleActionType(data, true)
@@ -93,22 +95,26 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
                     )
                 }
                 USER -> {
-                    handleStartSession()
+                    handleStartSession(true)
                 }
                 GROUP -> {
-                    handleStartSession()
+                    handleStartSession(true)
                 }
-                else -> {}
+                else -> return
             }
         }
-
     }
 
-    private fun handleStartSession() {
+    private fun handleStartSession(isPath:Boolean = false) {
         viewModelScope.launch {
-            delay(500)
-            if (LiveChatHelper.isOffline) screenType.value = CannedScreenType.OfflineScreen
-            else screenType.value = CannedScreenType.OnlineScreen
+            var pathID:Int? = null
+            if (isPath) { pathID = CannedResponseHelper.getPathId()}
+            if (!LiveChatHelper.isOffline && isAutoLoginControl()) autoLogin(pathID)
+            else {
+                delay(500)
+                if (isPath) screenType.value = CannedScreenType.LoginScreen(pathID)
+                else screenType.value = CannedScreenType.LoginScreen(null)
+            }
         }
     }
 
@@ -145,16 +151,16 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
             }
             cannedResponseUseCase(false)
         }
-        if (isStart) _newCannedResponse1.value = bindEntity
+        if (isStart) _startCannedResponse.value = bindEntity
         else _newCannedResponse.value = bindEntity
     }
 
     fun cannedResponseUseCase(isBackPress:Boolean = true) {
-        if (CannedResponseObject.payloadLogData.isNullOrEmpty()) return
+        if (CannedResponseHelper.payloadLogData.isNullOrEmpty()) return
         CannedResponseUseCase(
             CRRequest(
-                CannedResponseObject.payloadLogData,
-                CannedResponseObject.getPathId(),
+                CannedResponseHelper.payloadLogData,
+                CannedResponseHelper.getPathId(),
                 "Android"
             )
         ).execute(onSuccess = {
@@ -200,7 +206,7 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
             FeedbackUseCase(
                 FeedbackRequest(
                     feedBack,
-                    payload = CannedResponseObject.payloadLogData,
+                    payload = CannedResponseHelper.payloadLogData,
                     pathId = null,
                     source = "Android"
                 )
@@ -214,8 +220,8 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
 
     fun writeActionMessage(actionId: Int?, id: Int?, type: String) {
         if (type == ACTIONABLE_TYPE_PATH && actionId != null && id != null) {
-            CannedResponseObject.addPayloadLog(id)
-            val content = CannedResponseObject.getButton(id)?.content
+            CannedResponseHelper.addPayloadLog(id)
+            val content = CannedResponseHelper.getButton(id)?.content
             val message: CannedActionType.CRMessage? =
                 content?.let { it1 -> CannedActionType.CRMessage(null, it1, true) }
             message?.let { bindEntity.add(it) }
@@ -229,7 +235,7 @@ abstract class BaseCannedBindViewModel : BaseViewModel() {
             _newCannedResponse.value = bindEntity
         }
         if (actionId == null) {
-            val content = CannedResponseObject.getMenuButton(type)?.content
+            val content = CannedResponseHelper.getMenuButton(type)?.content
             val message: CannedActionType.CRMessage? = content?.let { c ->
                 CannedActionType.CRMessage(null, c, true)
             }

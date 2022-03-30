@@ -1,4 +1,4 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response
+package com.desk360.livechat.data.model.cannedresponse.response
 
 import com.google.gson.annotations.SerializedName
 

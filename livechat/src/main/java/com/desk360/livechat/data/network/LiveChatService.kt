@@ -10,7 +10,7 @@ import com.desk360.livechat.data.model.session.EndSessionRequest
 import com.desk360.livechat.data.model.session.EndSessionResponse
 import com.desk360.livechat.data.model.session.SessionRequest
 import com.desk360.livechat.data.model.session.SessionResponse
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.request.CRRequest
+import com.desk360.livechat.data.model.cannedresponse.request.CRRequest
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import okhttp3.MultipartBody

@@ -1,6 +1,6 @@
 package com.desk360.livechat.data.model.chatsettings
 
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.response.CannedResponse
+import com.desk360.livechat.data.model.cannedresponse.response.CannedResponse
 import com.google.gson.annotations.SerializedName
 
 data class Data(

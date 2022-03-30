@@ -1,4 +1,4 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation
+package com.desk360.livechat.presentation.activity.livechat
 
 import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,13 +12,11 @@ import com.desk360.livechat.R
 import com.desk360.livechat.databinding.ActivityCannedResponseBinding
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.activity.BaseActivity
-import com.desk360.livechat.presentation.activity.livechat.LiveChatActivity
-import com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.CannedResponseObject
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model.CannedScreenType
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.adapter.CannedResponseAdapter
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel.BaseCannedBindViewModel.Companion.ACTION_SURVEY
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.presentation.viewmodel.CannedResponseViewModel
+import com.desk360.livechat.presentation.activity.BaseChatActivity
+import com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity.Companion.EXTRA_PATH_ID
+import com.desk360.livechat.data.model.cannedresponse.CannedScreenType
+import com.desk360.livechat.presentation.adapter.CannedResponseAdapter
+import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel.Companion.ACTION_SURVEY
 import com.skydoves.balloon.balloon
 import kotlinx.coroutines.*
 
@@ -97,31 +95,41 @@ class CannedResponseActivity :
                 }
             }, 200)
         })
-        viewModel.newCannedResponse1.observe(this, { data ->
+        viewModel.startCannedResponse.observe(this, { data ->
             cannedResponseListAdapter?.setData(data, true)
             viewModel.clearBindEntity()
         })
 
+        viewModel.conversationDeskId.observe(this, { conversationId ->
+            if (conversationId.isNotEmpty()) {
+                finish()
+                startActivity(Intent(this, LiveChatActivity::class.java).apply {
+                    putExtra(BaseChatActivity.EXTRA_CONVERSATION_ID, conversationId)
+                })
+            }
+        })
         viewModel.screenType.observe(this, { screen ->
-            if (screen == CannedScreenType.OnlineScreen) {
-                startActivity(Intent(this, LiveChatActivity::class.java))
-                finish()
-            }
-            if (screen == CannedScreenType.OfflineScreen) {
-                startActivity(Intent(this, LoginNewChatActivity::class.java))
-                finish()
-            }
-            if (screen == CannedScreenType.OnBackScreen) {
-                onBackPressed()
-            }
-            if (screen == CannedScreenType.OnSurveyInfoScreen) {
-                ChatPopup.Builder(this)
-                    .setStatus(Utils.DialogStatus.SUCCESS)
-                    .setMessage(LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle)
-                    .setCallbackPositiveButtonClick { dialog ->
-                        dialog.dismiss()
-                        finish()
-                    }.build().show()
+            when (screen) {
+                is CannedScreenType.LoginScreen -> {
+                    val intent = Intent(this, LoginNewChatActivity::class.java)
+                    screen.pathId?.let {
+                        intent.putExtra(EXTRA_PATH_ID, true)
+                    }
+                    startActivity(intent)
+                    finish()
+                }
+                is CannedScreenType.OnSurveyInfoScreen -> {
+                    ChatPopup.Builder(this)
+                        .setStatus(Utils.DialogStatus.SUCCESS)
+                        .setMessage(LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle)
+                        .setCallbackPositiveButtonClick { dialog ->
+                            dialog.dismiss()
+                            finish()
+                        }.build().show()
+                }
+                is CannedScreenType.OnBackScreen -> {
+                    onBackPressed()
+                }
             }
         })
     }

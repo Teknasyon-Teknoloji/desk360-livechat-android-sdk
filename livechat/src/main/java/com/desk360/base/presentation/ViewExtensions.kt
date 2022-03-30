@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.AnticipateOvershootInterpolator
-import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
@@ -88,3 +87,5 @@ fun View.animationTranslationY(durationTime: Long, returnProperty: Float) {
         }
     AnimatorSet().apply { playTogether(translateUp, fade) }.start()
 }
+
+

@@ -1,6 +1,6 @@
-package com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.model
+package com.desk360.livechat.data.model.cannedresponse
 
-import com.desk360.livechat.presentation.activity.livechat.cannedresponse.data.CannedResponseObject
+import com.desk360.livechat.manager.CannedResponseHelper
 
 sealed class CannedActionType {
     data class CRButton(
@@ -17,7 +17,7 @@ sealed class CannedActionType {
         val id: Int?,
         val content: String,
         val isMine:Boolean = false,
-        val time:String = CannedResponseObject.getTime()
+        val time:String = CannedResponseHelper.getTime()
     ) : CannedActionType()
 
     data class CRMenuButton(
