@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.2.0"
+## 1.2.1 (2022-08-12)
+- Improve internet connection control in chat
+
+## 1.2.0 (2022-03-30)
 - Fixed online offline request timing.
 - Add auto login concept
 - Add canned response feature.
@@ -9,7 +12,7 @@ All notable changes to this project will be documented in this file.
 - General refactor.
 
 
-## 1.1.0"
+## 1.1.0 (2022-02-03)
 - Fixed to add file option for online chat case.
 - Add custom fields for offline chat and dynamic offline chat screen
 - Add base model refactor for isOffline mode properties check.
