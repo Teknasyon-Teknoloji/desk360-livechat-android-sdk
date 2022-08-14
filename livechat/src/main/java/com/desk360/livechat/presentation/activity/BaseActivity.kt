@@ -22,6 +22,7 @@ import com.desk360.base.presentation.component.CustomProgressDialog
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.receiver.ConnectivityBroadcastReceiver
 import com.desk360.base.util.Utils
+import com.desk360.base.util.isNetworkAvailable
 import com.desk360.livechat.BindingExt.binding
 import com.desk360.livechat.R
 import com.desk360.livechat.manager.LiveChatHelper
@@ -122,6 +123,11 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
         }
 
         viewModel.checkOnlineStatus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setConnection(isNetworkAvailable())
     }
 
     private fun registerReceivers() {
