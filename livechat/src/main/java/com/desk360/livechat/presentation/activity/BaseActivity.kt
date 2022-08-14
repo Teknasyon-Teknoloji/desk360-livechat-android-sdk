@@ -1,8 +1,11 @@
 package com.desk360.livechat.presentation.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.*
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -19,6 +22,7 @@ import com.desk360.base.presentation.component.CustomProgressDialog
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.receiver.ConnectivityBroadcastReceiver
 import com.desk360.base.util.Utils
+import com.desk360.base.util.isNetworkAvailable
 import com.desk360.livechat.BindingExt.binding
 import com.desk360.livechat.R
 import com.desk360.livechat.manager.LiveChatHelper
@@ -30,18 +34,46 @@ import java.net.ConnectException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 
-abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(), LifecycleObserver {
+abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(),
+    LifecycleObserver {
     protected val activityLauncher: BaseActivityResult<Intent, ActivityResult> =
         BaseActivityResult.registerActivityForResult(this)
 
     val binding: VB by binding(getLayoutResId())
-    val viewModel: VM by lazy {
-        ViewModelProvider(this).get(getViewModelClass())
-    }
+
+    val viewModel: VM by lazy { ViewModelProvider(this).get(getViewModelClass()) }
 
     val compositeDisposable = CompositeDisposable()
 
     val customProgressDialog = CustomProgressDialog()
+
+    private val connectivityManager by lazy {
+        applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+    }
+
+    private val connectivityCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            runOnUiThread { viewModel.setConnection(true) }
+        }
+
+        override fun onLost(network: Network) {
+            runOnUiThread { viewModel.setConnection(false) }
+        }
+
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) = Unit
+
+        override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) =
+            Unit
+    }
+
+    private val connectionReceiver = object : ConnectivityBroadcastReceiver() {
+        override fun onConnectionChanged(hasConnection: Boolean) {
+            viewModel.setConnection(hasConnection)
+        }
+    }
 
     @LayoutRes
     abstract fun getLayoutResId(): Int
@@ -62,7 +94,7 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
         initUI()
         initObservers()
 
-        viewModel.errorMessage.observe(this, { message ->
+        viewModel.errorMessage.observe(this) { message ->
             if (viewModel.error.value is ConnectException || viewModel.error.value is UnknownHostException) {
                 ChatPopup.Builder(this)
                     .setStatus(Utils.DialogStatus.CUSTOM)
@@ -77,29 +109,48 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
                     dialog.dismiss()
                 }
                 .build().show()
-        })
+        }
 
-        viewModel.isProgressDialogState.observe(this, {
+        viewModel.isProgressDialogState.observe(this) {
             when (it) {
-                AutoLoginTasksImpl.LoginProgressDialogState.START -> customProgressDialog.show(this,"Connecting...")
+                AutoLoginTasksImpl.LoginProgressDialogState.START -> customProgressDialog.show(
+                    this,
+                    "Connecting..."
+                )
                 AutoLoginTasksImpl.LoginProgressDialogState.STOP -> customProgressDialog.dialog.hideDialog()
                 else -> {}
             }
-        })
+        }
 
         viewModel.checkOnlineStatus()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.setConnection(isNetworkAvailable())
+    }
+
     private fun registerReceivers() {
-        ConnectivityBroadcastReceiver.registerToActivityAndAutoUnregister(this, object :
-            ConnectivityBroadcastReceiver() {
-            override fun onConnectionChanged(hasConnection: Boolean) {
-                viewModel.setConnection(hasConnection)
-            }
-        })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityManager?.registerDefaultNetworkCallback(connectivityCallback)
+        } else {
+            registerReceiver(
+                connectionReceiver,
+                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            )
+        }
+    }
+
+    private fun unRegisterReceivers() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityManager?.unregisterNetworkCallback(connectivityCallback)
+        } else {
+            unregisterReceiver(connectionReceiver)
+        }
     }
 
     override fun onDestroy() {
+        unRegisterReceivers()
         compositeDisposable.dispose()
         super.onDestroy()
     }
