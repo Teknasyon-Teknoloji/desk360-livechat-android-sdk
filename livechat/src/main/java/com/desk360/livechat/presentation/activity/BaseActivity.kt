@@ -17,22 +17,24 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.desk360.base.domain.usecase.AutoLoginTasksImpl
 import com.desk360.base.presentation.component.CustomProgressDialog
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.receiver.ConnectivityBroadcastReceiver
 import com.desk360.base.util.Utils
+import com.desk360.base.util.flowOfClick
 import com.desk360.base.util.isNetworkAvailable
+import com.desk360.base.util.throttleFirst
 import com.desk360.livechat.BindingExt.binding
 import com.desk360.livechat.R
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
-import com.jakewharton.rxbinding2.view.RxView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.net.ConnectException
 import java.net.UnknownHostException
-import java.util.concurrent.TimeUnit
 
 abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(),
     LifecycleObserver {
@@ -174,9 +176,13 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
     }
 
     protected fun View.onClick(onSuccess: ((Any) -> Unit)) {
-        val disposable = RxView.clicks(this)
-            .throttleFirst(2000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
-        compositeDisposable.add(disposable)
+        lifecycleScope.launch {
+            flowOfClick()
+                .throttleFirst(2000)
+                .flowOn(Dispatchers.Main)
+                .collect {
+                    onSuccess(this@onClick)
+                }
+        }
     }
 }
