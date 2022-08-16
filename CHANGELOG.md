@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.2 (2022-08-16)
+- Remove rx binding dependency
+
 ## 1.2.1 (2022-08-12)
 - Improve internet connection control in chat
 
