@@ -7,5 +7,5 @@ import com.desk360.livechat.manager.LiveChatHelper
 class IsOfflineUseCase : BaseFirebaseUseCase<Boolean>(OffLineMapper()) {
 
     override val rootNode: String
-        get() = "count/${LiveChatHelper.settings?.data?.companyId}/online"
+        get() = "count/${LiveChatHelper.settings?.data?.companyId}/${LiveChatHelper.settings?.data?.applicationId}/online"
 }
