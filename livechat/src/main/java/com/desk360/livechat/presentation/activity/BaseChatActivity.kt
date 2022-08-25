@@ -143,8 +143,12 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     override fun initObservers() {
         viewModel.conversationIntentId = intent.getStringExtra(EXTRA_CONVERSATION_ID)
 
-        viewModel.checkStatus(1)
+        val applicationId = LiveChatHelper.settings?.data?.applicationId
+        val companyId = LiveChatHelper.settings?.data?.companyId
 
+        if(companyId!=null && applicationId!=null){
+            viewModel.checkStatus(companyId,applicationId)
+        }
         viewModel.newMessages.observe(this, { messages ->
             messageListAdapter?.submitList(messages)
 

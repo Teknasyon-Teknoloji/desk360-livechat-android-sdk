@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.3 (2022-08-25)
+- Fixed offline firebase path
+
 ## 1.2.2 (2022-08-16)
 - Remove rx binding dependency
 

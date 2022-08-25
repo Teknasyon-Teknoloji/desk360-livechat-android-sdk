@@ -87,11 +87,11 @@ class ChatViewModel : BaseViewModel() {
         }
     }
 
-    fun checkStatus(companyId: Int) {
+    fun checkStatus(companyId: Int,applicationId:Int) {
         getMessages()
         signInWithToken()
 
-        LiveChatFirebaseHelper.isOffline(companyId)
+        LiveChatFirebaseHelper.isOffline(companyId,applicationId)
             ?.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     isOffline.value = snapshot.getValue(Int::class.java) == 0
