@@ -73,11 +73,13 @@ class CannedResponseAdapter(var onClick: (Int?, Int, String) -> Unit) :
         adapterData.drop(size).forEach { data ->
             if (data is CannedActionType.CRButton) {
                 data.isClickable = false
-                if (data.id == id && !data.isSelected) data.isSelected = true
+                if (data.id == id && !data.isSelected)
+                    data.isSelected = true
             }
             if (data is CannedActionType.CRMenuButton) {
                 data.isClickable = false
-                if (data.id == id && !data.isSelected) data.isSelected = true
+                if (data.id == id && !data.isSelected)
+                    data.isSelected = true
             }
         }
     }

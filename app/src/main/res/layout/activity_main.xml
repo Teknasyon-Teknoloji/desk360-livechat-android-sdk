@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.desk360.android_live_chat_example.MainActivity">
+    tools:context="com.desk360.android_live_chat_example.MainActivity"
+    android:padding="10dp">
 
     <com.desk360.base.presentation.component.LiveChatFloatingActionButton
         android:id="@+id/fab_live_chat"
@@ -20,5 +21,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:targetApi="lollipop"
         tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/language_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Language Code(tr,ar,de)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Livechat Settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language_code" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

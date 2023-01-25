@@ -1,18 +1,19 @@
 package com.desk360.livechat.presentation.activity.livechat
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.desk360.livechat.data.HeaderCompanyScreenModel
-import com.desk360.livechat.data.model.feedback.FeedbackRequest
-import com.desk360.livechat.domain.usecase.FeedbackUseCase
-import com.desk360.livechat.manager.LiveChatHelper
-import com.desk360.livechat.manager.CannedResponseHelper
 import com.desk360.livechat.data.model.cannedresponse.CannedActionType
 import com.desk360.livechat.data.model.cannedresponse.CannedScreenType
 import com.desk360.livechat.data.model.cannedresponse.request.CRRequest
 import com.desk360.livechat.data.model.cannedresponse.response.CannedResponse
 import com.desk360.livechat.data.model.cannedresponse.response.GroupedUnits
+import com.desk360.livechat.data.model.feedback.FeedbackRequest
 import com.desk360.livechat.domain.usecase.CannedResponseUseCase
+import com.desk360.livechat.domain.usecase.FeedbackUseCase
+import com.desk360.livechat.manager.CannedResponseHelper
+import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,15 +61,16 @@ class CannedResponseViewModel : BaseViewModel() {
         MutableLiveData(null)
     }
 
-    private val _newCannedResponse: MutableLiveData<MutableList<CannedActionType>> =
-        MutableLiveData()
-    val newCannedResponse get() = _newCannedResponse
+    private val _newCannedResponse = MutableLiveData<List<CannedActionType>>()
+    val newCannedResponse: LiveData<List<CannedActionType>>
+        get() = _newCannedResponse
 
-    private val _startCannedResponse: MutableLiveData<MutableList<CannedActionType>> =
-        MutableLiveData()
-    val startCannedResponse get() = _startCannedResponse
+    private val _startCannedResponse = MutableLiveData<List<CannedActionType>>()
+    val startCannedResponse: LiveData<List<CannedActionType>>
+        get() = _startCannedResponse
 
-    private val cannedResponseModel = CannedResponseHelper.cannedResponseModel
+    private val cannedResponseModel: List<CannedResponse>
+        get() = CannedResponseHelper.cannedResponseModel
 
     private val bindEntity: MutableList<CannedActionType> = mutableListOf()
 
@@ -76,87 +78,80 @@ class CannedResponseViewModel : BaseViewModel() {
 
     fun startCannedResponse() {
         CannedResponseHelper.modelInitiate()
-        cannedResponseModel?.forEach { data ->
-            if (data.isStart == 1) {
-                getHandleActionType(data, true)
-                return@forEach
-            }
-        }
+        cannedResponseModel
+            .find { it.isStart == 1 }
+            ?.let { getHandleActionType(it, true) }
     }
 
     private fun getHandleActionType(cannedResponse: CannedResponse, isStart: Boolean = false) {
-        cannedResponse.actionableType?.let { type ->
-            when (type) {
-                SURVEY -> cannedResponse.groupedUnits?.let { handleSurvey(it) }
-                REPLY_BUTTONS -> cannedResponse.groupedUnits?.let {
-                    handleReplyButtons(
-                        it,
-                        isStart
-                    )
-                }
-                USER -> {
-                    handleStartSession(true)
-                }
-                GROUP -> {
-                    handleStartSession(true)
-                }
-                else -> return
-            }
+        when (cannedResponse.actionableType) {
+            SURVEY -> handleSurvey()
+            REPLY_BUTTONS -> cannedResponse.groupedUnits?.let { handleReplyButtons(it, isStart) }
+            USER -> handleStartSession(true)
+            GROUP -> handleStartSession(true)
         }
     }
 
-    private fun handleStartSession(isPath:Boolean = false) {
+    private fun handleStartSession(isPath: Boolean = false) {
         viewModelScope.launch {
-            var pathID:Int? = null
-            if (isPath) { pathID = CannedResponseHelper.getPathId()}
-            if (!LiveChatHelper.isOffline && isAutoLoginControl()) autoLogin(pathID)
-            else {
+            var pathID: Int? = null
+            if (isPath) {
+                pathID = CannedResponseHelper.getPathId()
+            }
+            if (!LiveChatHelper.isOffline && isAutoLoginControl()) {
+                autoLogin(pathID)
+            } else {
                 delay(500)
-                if (isPath) screenType.value = CannedScreenType.LoginScreen(pathID)
-                else screenType.value = CannedScreenType.LoginScreen(null)
+                screenType.value = if (isPath)
+                    CannedScreenType.LoginScreen(pathID)
+                else
+                    CannedScreenType.LoginScreen(null)
             }
         }
     }
 
     private fun handleReplyButtons(groupedUnits: GroupedUnits, isStart: Boolean) {
-        groupedUnits.message?.let { msg ->
-            msg.forEach { i ->
-                bindEntity.add(CannedActionType.CRMessage(i.id, i.content))
-            }
+        groupedUnits.message?.forEach { msg ->
+            bindEntity.add(CannedActionType.CRMessage(msg.id, msg.content))
         }
-        groupedUnits.button?.let { btn ->
-            btn.forEach { i ->
-                bindEntity.add(
-                    CannedActionType.CRButton(
-                        i.id,
-                        i.actionableId,
-                        i.content,
-                        i.orderId,
-                        i.actionableType
-                    )
+
+        groupedUnits.button?.forEach { btn ->
+            bindEntity.add(
+                CannedActionType.CRButton(
+                    btn.id,
+                    btn.actionableId,
+                    btn.content,
+                    btn.orderId,
+                    btn.actionableType
                 )
-            }
+            )
         }
-        groupedUnits.closeMenuButton?.let { cBtn ->
-            cBtn.forEach { i ->
+
+        groupedUnits.closeMenuButton?.let { cmb ->
+            cmb.forEach { btn ->
                 bindEntity.add(
                     CannedActionType.CRMenuButton(
-                        i.id,
-                        i.actionableType,
-                        i.icon,
-                        i.orderId,
-                        i.content
+                        btn.id,
+                        btn.actionableType,
+                        btn.icon,
+                        btn.orderId,
+                        btn.content
                     )
                 )
             }
-            cannedResponseUseCase(false)
+            cannedResponseUseCase()
         }
-        if (isStart) _startCannedResponse.value = bindEntity
-        else _newCannedResponse.value = bindEntity
+
+        if (isStart)
+            _startCannedResponse.value = bindEntity
+        else
+            _newCannedResponse.value = bindEntity
     }
 
-    fun cannedResponseUseCase(isBackPress:Boolean = true) {
-        if (CannedResponseHelper.payloadLogData.isNullOrEmpty()) return
+    fun cannedResponseUseCase() {
+        if (CannedResponseHelper.payloadLogData.isEmpty())
+            return
+
         CannedResponseUseCase(
             CRRequest(
                 CannedResponseHelper.payloadLogData,
@@ -170,34 +165,21 @@ class CannedResponseViewModel : BaseViewModel() {
         })
     }
 
-    private fun handleSurvey(groupedUnits: GroupedUnits) {
-        groupedUnits.message?.let { msg ->
-            msg.forEach { i ->
-                bindEntity.add(CannedActionType.CRSurvey(i.id, i.content, ACTION_SURVEY))
-            }
-        }
+    private fun handleSurvey() {
+        bindEntity.add(CannedActionType.CRSurvey)
         _newCannedResponse.value = bindEntity
     }
 
     fun actionCannedResponse(id: Int) {
-        cannedResponseModel?.forEach {
-            if (it.id == id) {
-                getHandleActionType(it)
-                return@forEach
-            }
-        }
+        val model = cannedResponseModel.find { it.id == id } ?: return
+        getHandleActionType(model)
     }
 
     fun actionCannedResponseMenu(type: String) {
         when (type) {
-            ACTION_SURVEY -> {
-                cannedResponseModel?.find { model ->
-                    model.actionableType == type
-                }?.groupedUnits?.let { handleSurvey(it) }
-            }
+            ACTION_SURVEY -> handleSurvey()
             ACTION_LIVE_HELP -> handleStartSession()
             ACTION_START_PATH -> startCannedResponse()
-
         }
     }
 
@@ -221,25 +203,24 @@ class CannedResponseViewModel : BaseViewModel() {
     fun writeActionMessage(actionId: Int?, id: Int?, type: String) {
         if (type == ACTIONABLE_TYPE_PATH && actionId != null && id != null) {
             CannedResponseHelper.addPayloadLog(id)
-            val content = CannedResponseHelper.getButton(id)?.content
-            val message: CannedActionType.CRMessage? =
-                content?.let { it1 -> CannedActionType.CRMessage(null, it1, true) }
-            message?.let { bindEntity.add(it) }
+            CannedResponseHelper.getButton(id)?.content?.let { content ->
+                val message = CannedActionType.CRMessage(null, content, true)
+                bindEntity.add(message)
+            }
             _newCannedResponse.value = bindEntity
         }
         if (type == ACTION_SURVEY && actionId == 0) {
-            val message: CannedActionType.CRMessage? = LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle?.let { c ->
-                CannedActionType.CRMessage(null, c, true)
+            LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle?.let { title ->
+                val message = CannedActionType.CRMessage(null, title, true)
+                bindEntity.add(message)
             }
-            message?.let { bindEntity.add(it) }
             _newCannedResponse.value = bindEntity
         }
         if (actionId == null) {
-            val content = CannedResponseHelper.getMenuButton(type)?.content
-            val message: CannedActionType.CRMessage? = content?.let { c ->
-                CannedActionType.CRMessage(null, c, true)
+            CannedResponseHelper.getMenuButton(type)?.content?.let { content ->
+                val message = CannedActionType.CRMessage(null, content, true)
+                bindEntity.add(message)
             }
-            message?.let { bindEntity.add(it) }
             _newCannedResponse.value = bindEntity
         }
     }

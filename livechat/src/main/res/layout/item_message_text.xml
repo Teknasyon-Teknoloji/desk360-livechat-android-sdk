@@ -32,87 +32,79 @@
             android:layout_height="wrap_content"
             android:padding="1dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_message_box"
+            <View
+                android:id="@+id/bg_message"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
+                app:layout_constraintBottom_toBottomOf="@id/text_view_content"
+                app:layout_constraintEnd_toEndOf="@id/image_view_blue_tick"
+                app:layout_constraintStart_toStartOf="@id/text_view_content"
+                app:layout_constraintTop_toTopOf="@id/text_view_content"
+                bind:backgroundTint="@{viewModel.backgroundColor}"
+                tools:background="@drawable/bg_outgoing_message_row" />
+
+
+            <TextView
+                android:id="@+id/text_view_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@{viewModel.isMine ? @drawable/bg_outgoing_message_row: @drawable/bg_incoming_message_row}"
-                android:minWidth="100dp"
-                android:paddingStart="15dp"
-                android:paddingLeft="15dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:autoLink="web"
+                android:fontFamily="@font/gotham_book"
+                android:gravity="center_vertical"
+                android:justificationMode="inter_word"
+                android:maxWidth="230dp"
+                android:paddingStart="8dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="@{viewModel.body}"
+                android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/text_view_time"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:backgroundTint="@{viewModel.backgroundColor}"
-                tools:background="@drawable/bg_outgoing_message_row">
+                bind:textColor="@{viewModel.messageTextColor}"
+                tools:text="lorem ipsum lorem sit amet"
+                tools:textColor="@color/white"
+                tools:ignore="RtlSymmetry" />
 
-                <TextView
-                    android:id="@+id/text_view_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-                    android:fontFamily="@font/gotham_book"
-                    android:gravity="center_vertical"
-                    android:justificationMode="inter_word"
-                    android:linksClickable="true"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:text="@{viewModel.body}"
-                    android:textColorLink="@{viewModel.isMine ?  @color/white:  @color/black}"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    bind:textColor="@{viewModel.messageTextColor}"
-                    tools:ignore="RtlSymmetry"
-                    tools:targetApi="o"
-                    tools:text="burak ocak"
-                    tools:textColor="@color/white" />
+            <TextView
+                android:id="@+id/text_view_time"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/gotham_medium"
+                android:gravity="end"
+                android:paddingBottom="2dp"
+                android:singleLine="true"
+                android:text="@{viewModel.time.trim()}"
+                android:textSize="10sp"
+                android:visibility="@{!viewModel.isError ? view.VISIBLE : view.GONE}"
+                app:layout_constraintBottom_toBottomOf="@id/text_view_content"
+                app:layout_constraintEnd_toStartOf="@id/image_view_blue_tick"
+                bind:textColor="@{viewModel.messageTextColor}"
+                tools:text="16:00"
+                tools:textColor="@color/white"
+                tools:ignore="SmallSp" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_time_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="2dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/text_view_content"
-                    app:layout_constraintEnd_toEndOf="parent">
+            <ImageView
+                android:id="@+id/image_view_blue_tick"
+                android:layout_width="22dp"
+                android:layout_height="16dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="2dp"
+                android:visibility="@{viewModel.isMine ? view.VISIBLE : view.GONE}"
+                app:layout_constraintBottom_toBottomOf="@id/text_view_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/text_view_time"
+                bind:setMessageStatus="@{viewModel.status}"
+                tools:src="@drawable/ic_blue_tick_seen"
+                tools:ignore="RtlSymmetry" />
 
-                    <TextView
-                        android:id="@+id/text_view_time"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/gotham_medium"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:text="@{viewModel.time.trim()}"
-                        android:textSize="10sp"
-                        android:visibility="@{!viewModel.isError ? view.VISIBLE : view.GONE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/image_view_blue_tick"
-                        bind:textColor="@{viewModel.messageTextColor}"
-                        tools:ignore="SmallSp"
-                        tools:text="6:22"
-                        tools:textColor="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/image_view_blue_tick"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:contentDescription="@null"
-                        android:visibility="@{viewModel.isMine ? view.VISIBLE : view.GONE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        bind:setMessageStatus="@{viewModel.status}"
-                        tools:src="@drawable/ic_blue_tick_seen"
-                        tools:visibility="visible" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,9 +121,10 @@
                 app:drawableLeftCompat="@drawable/ic_error"
                 app:drawableStartCompat="@drawable/ic_error"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_message_box"
+                app:layout_constraintTop_toBottomOf="@+id/bg_message"
                 bind:visibility="@{viewModel.isError}"
                 tools:ignore="SmallSp"
+                tools:text="hata"
                 tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

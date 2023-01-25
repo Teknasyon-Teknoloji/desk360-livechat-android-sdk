@@ -9,16 +9,15 @@ import com.desk360.base.presentation.menu.MenuItem
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.util.Utils
 import com.desk360.livechat.R
+import com.desk360.livechat.data.model.cannedresponse.CannedScreenType
 import com.desk360.livechat.databinding.ActivityCannedResponseBinding
 import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.activity.BaseActivity
 import com.desk360.livechat.presentation.activity.BaseChatActivity
-import com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity.Companion.EXTRA_PATH_ID
-import com.desk360.livechat.data.model.cannedresponse.CannedScreenType
-import com.desk360.livechat.presentation.adapter.CannedResponseAdapter
 import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel.Companion.ACTION_SURVEY
+import com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity.Companion.EXTRA_PATH_ID
+import com.desk360.livechat.presentation.adapter.CannedResponseAdapter
 import com.skydoves.balloon.balloon
-import kotlinx.coroutines.*
 
 class CannedResponseActivity :
     BaseActivity<ActivityCannedResponseBinding, CannedResponseViewModel>(),
@@ -50,13 +49,16 @@ class CannedResponseActivity :
 
     private fun initAdapter() {
         cannedResponseListAdapter = CannedResponseAdapter { action, id, type ->
-            if (type == ACTION_SURVEY && (id == 1 || id == 2)) viewModel.surveyFeedBackUseCase(id)
-            else {
+            if (type == ACTION_SURVEY && (id == 1 || id == 2)) {
+                viewModel.surveyFeedBackUseCase(id)
+            } else {
                 cannedResponseListAdapter?.updateClickable(id)
                 viewModel.writeActionMessage(action, id, type)
-                action?.let {
-                    viewModel.actionCannedResponse(it)
-                } ?: viewModel.actionCannedResponseMenu(type)
+
+                if (action != null)
+                    viewModel.actionCannedResponse(action)
+                else
+                    viewModel.actionCannedResponseMenu(type)
             }
         }
         linearLayoutManager =
@@ -86,7 +88,14 @@ class CannedResponseActivity :
     }
 
     override fun initObservers() {
-        viewModel.newCannedResponse.observe(this, {
+        observeNewCannedResponse()
+        observeStartCannedResponse()
+        observeConversationDeskId()
+        observeScreenType()
+    }
+
+    private fun observeNewCannedResponse() {
+        viewModel.newCannedResponse.observe(this) {
             cannedResponseListAdapter?.setData(it, false)
             viewModel.clearBindEntity()
             binding.recyclerViewMessageList.postDelayed({
@@ -94,44 +103,54 @@ class CannedResponseActivity :
                     binding.recyclerViewMessageList.smoothScrollToPosition(count)
                 }
             }, 200)
-        })
-        viewModel.startCannedResponse.observe(this, { data ->
+        }
+    }
+
+    private fun observeStartCannedResponse() {
+        viewModel.startCannedResponse.observe(this) { data ->
             cannedResponseListAdapter?.setData(data, true)
             viewModel.clearBindEntity()
-        })
+        }
+    }
 
-        viewModel.conversationDeskId.observe(this, { conversationId ->
+    private fun observeConversationDeskId() {
+        viewModel.conversationDeskId.observe(this) { conversationId ->
             if (conversationId.isNotEmpty()) {
                 finish()
                 startActivity(Intent(this, LiveChatActivity::class.java).apply {
                     putExtra(BaseChatActivity.EXTRA_CONVERSATION_ID, conversationId)
                 })
             }
-        })
-        viewModel.screenType.observe(this, { screen ->
+        }
+    }
+
+    private fun observeScreenType() {
+        viewModel.screenType.observe(this) { screen ->
             when (screen) {
-                is CannedScreenType.LoginScreen -> {
-                    val intent = Intent(this, LoginNewChatActivity::class.java)
-                    screen.pathId?.let {
-                        intent.putExtra(EXTRA_PATH_ID, true)
-                    }
-                    startActivity(intent)
-                    finish()
-                }
-                is CannedScreenType.OnSurveyInfoScreen -> {
-                    ChatPopup.Builder(this)
-                        .setStatus(Utils.DialogStatus.SUCCESS)
-                        .setMessage(LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle)
-                        .setCallbackPositiveButtonClick { dialog ->
-                            dialog.dismiss()
-                            finish()
-                        }.build().show()
-                }
-                is CannedScreenType.OnBackScreen -> {
-                    onBackPressed()
-                }
+                is CannedScreenType.LoginScreen -> onLoginScreen(screen)
+                is CannedScreenType.OnSurveyInfoScreen -> onSurveInfoScreen()
+                is CannedScreenType.OnBackScreen -> onBackPressed()
             }
-        })
+        }
+    }
+
+    private fun onLoginScreen(screen: CannedScreenType.LoginScreen) {
+        val intent = Intent(this, LoginNewChatActivity::class.java)
+        screen.pathId?.let {
+            intent.putExtra(EXTRA_PATH_ID, true)
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun onSurveInfoScreen() {
+        ChatPopup.Builder(this)
+            .setStatus(Utils.DialogStatus.SUCCESS)
+            .setMessage(LiveChatHelper.settings?.data?.language?.crFeedBackSuccessTitle)
+            .setCallbackPositiveButtonClick { dialog ->
+                dialog.dismiss()
+                finish()
+            }.build().show()
     }
 
     override fun onBackPressed() {
