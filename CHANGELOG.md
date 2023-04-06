@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.4 (2022-04-06)
+- Fix new chat card not visible on certain conditions
+
 ## 1.2.3 (2022-08-25)
 - Fixed offline firebase path
 

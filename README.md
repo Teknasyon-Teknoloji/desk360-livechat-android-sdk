@@ -58,7 +58,7 @@ Add the dependency
 
 ```groovy
 dependencies {
-        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.2.2'
+        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.2.4'
 }
 ```
 

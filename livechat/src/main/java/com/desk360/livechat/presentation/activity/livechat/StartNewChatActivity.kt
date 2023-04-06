@@ -53,18 +53,17 @@ class StartNewChatActivity : BaseActivity<ActivityStartNewChatBinding, StartNewC
     }
 
     override fun initObservers() {
-
-        viewModel.conversations.observe(this, {
+        viewModel.conversations.observe(this) {
             conversationListAdapter?.submitList(it)
-        })
+        }
 
-        viewModel.conversationDeskId.observe(this, { conversationId ->
+        viewModel.conversationDeskId.observe(this) { conversationId ->
             if (conversationId.isNotEmpty()) {
                 startActivity(Intent(this, LiveChatActivity::class.java).apply {
                     putExtra(BaseChatActivity.EXTRA_CONVERSATION_ID, conversationId)
                 })
             }
-        })
+        }
     }
 
     override fun onResume() {

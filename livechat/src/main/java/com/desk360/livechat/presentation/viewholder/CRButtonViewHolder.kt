@@ -10,11 +10,11 @@ import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewMod
 
 class CRButtonViewHolder(
     private val binding: ItemCrButtonBinding,
-    onClick: (Int?, Int, String) -> Unit
+    onClick: OnCannedViewHolderClickListener
 ) : BaseCannedResponseViewHolder(binding.root, onClick) {
 
     companion object {
-        fun create(parent: ViewGroup, onClick: (Int?, Int, String) -> Unit) = CRButtonViewHolder(
+        fun create(parent: ViewGroup, onClick: OnCannedViewHolderClickListener) = CRButtonViewHolder(
             ItemCrButtonBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

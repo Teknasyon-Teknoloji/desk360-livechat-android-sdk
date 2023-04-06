@@ -6,8 +6,9 @@ import com.desk360.base.presentation.animationTranslationY
 import com.desk360.livechat.data.model.cannedresponse.CannedActionType
 import com.desk360.livechat.presentation.viewholder.*
 
-class CannedResponseAdapter(var onClick: (Int?, Int, String) -> Unit) :
-    RecyclerView.Adapter<BaseCannedResponseViewHolder>() {
+class CannedResponseAdapter(
+    private var onClick: BaseCannedResponseViewHolder.OnCannedViewHolderClickListener
+) : RecyclerView.Adapter<BaseCannedResponseViewHolder>() {
 
     private val adapterData = mutableListOf<CannedActionType>()
     private var newDataSize: Int = 0
@@ -27,7 +28,7 @@ class CannedResponseAdapter(var onClick: (Int?, Int, String) -> Unit) :
             TYPE_REPLY_BUTTON -> CRButtonViewHolder.create(parent, onClick)
             TYPE_MESSAGE -> CRMessageViewHolder.create(parent, onClick)
             TYPE_CLOSE_AND_SURVEY -> CrSurveyViewHolder.create(parent, onClick).apply {
-                this.itemView.animationTranslationY(1000L,400f)
+                this.itemView.animationTranslationY(1000L, 400f)
             }
             TYPE_CLOSE_MENU_BUTTON -> CrMenuButtonViewHolder.create(parent, onClick)
             else -> throw IllegalArgumentException("Invalid type")

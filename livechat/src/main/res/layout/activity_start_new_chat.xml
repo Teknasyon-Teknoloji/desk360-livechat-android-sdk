@@ -7,10 +7,6 @@
     <data>
 
         <variable
-            name="view"
-            type="android.view.View" />
-
-        <variable
             name="viewModel"
             type="com.desk360.livechat.presentation.activity.livechat.StartNewChatViewModel" />
     </data>
@@ -53,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view_top_banner"
             bind:visibility="@{viewModel.needNewToken}"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -174,6 +170,7 @@
             bind:visibility="@{!viewModel.needNewToken}"
             tools:background="@color/white"
             tools:itemCount="1"
+            tools:visibility="gone"
             tools:listitem="@layout/item_live_chat_conversation" />
 
         <View

@@ -17,6 +17,7 @@ import com.desk360.livechat.presentation.activity.BaseChatActivity
 import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewModel.Companion.ACTION_SURVEY
 import com.desk360.livechat.presentation.activity.livechat.LoginNewChatActivity.Companion.EXTRA_PATH_ID
 import com.desk360.livechat.presentation.adapter.CannedResponseAdapter
+import com.desk360.livechat.presentation.viewholder.BaseCannedResponseViewHolder.OnCannedViewHolderClickListener
 import com.skydoves.balloon.balloon
 
 class CannedResponseActivity :
@@ -48,7 +49,7 @@ class CannedResponseActivity :
     }
 
     private fun initAdapter() {
-        cannedResponseListAdapter = CannedResponseAdapter { action, id, type ->
+        val clickListener = OnCannedViewHolderClickListener { action, id, type ->
             if (type == ACTION_SURVEY && (id == 1 || id == 2)) {
                 viewModel.surveyFeedBackUseCase(id)
             } else {
@@ -61,8 +62,14 @@ class CannedResponseActivity :
                     viewModel.actionCannedResponseMenu(type)
             }
         }
-        linearLayoutManager =
-            LinearLayoutManager(this@CannedResponseActivity, LinearLayoutManager.VERTICAL, false)
+
+        cannedResponseListAdapter = CannedResponseAdapter(clickListener)
+
+        linearLayoutManager = LinearLayoutManager(
+            /* context = */ this@CannedResponseActivity,
+            /* orientation = */ LinearLayoutManager.VERTICAL,
+            /* reverseLayout = */ false
+        )
 
         binding.recyclerViewMessageList.apply {
             adapter = cannedResponseListAdapter
@@ -136,9 +143,10 @@ class CannedResponseActivity :
 
     private fun onLoginScreen(screen: CannedScreenType.LoginScreen) {
         val intent = Intent(this, LoginNewChatActivity::class.java)
-        screen.pathId?.let {
+
+        if (screen.pathId != null)
             intent.putExtra(EXTRA_PATH_ID, true)
-        }
+
         startActivity(intent)
         finish()
     }

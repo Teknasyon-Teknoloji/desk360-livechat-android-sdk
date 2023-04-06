@@ -67,4 +67,8 @@ object CannedResponseHelper {
     fun addPayloadLog(id: Int) {
         payloadLogData.add(CannedPayloadModel(id, DateUtils.now()))
     }
+
+    fun clearPayloadLog(){
+        payloadLogData.clear()
+    }
 }

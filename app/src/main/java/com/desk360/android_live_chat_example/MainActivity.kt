@@ -3,6 +3,7 @@ package com.desk360.android_live_chat_example
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.desk360.android_live_chat_sdk.R
@@ -16,6 +17,9 @@ class MainActivity : AppCompatActivity() {
         val btnLiveChat = findViewById<View>(R.id.fab_live_chat)
         val txtLanguageCode = findViewById<EditText>(R.id.language_code)
         val load = findViewById<Button>(R.id.load)
+        val name = findViewById<EditText>(R.id.name)
+        val email = findViewById<EditText>(R.id.email)
+        val useUser = findViewById<CheckBox>(R.id.set_user)
 
         load.setOnClickListener {
             btnLiveChat.visibility = View.GONE
@@ -30,8 +34,18 @@ class MainActivity : AppCompatActivity() {
                 .setDomainAddress("https://domain.desk360.com")
                 .setToken("token")
                 .setLanguageCode(languageCode)
-                .setUserName("Luke")
-                .setUserEmailAddress("luke@emailadress.com")
+                .apply {
+                    if(!useUser.isChecked)
+                        return@apply
+
+                    val username = name.text?.toString()
+                    if (!username.isNullOrBlank())
+                        setUserName(username)
+
+                    val userMail = email.text?.toString()
+                    if(!userMail.isNullOrBlank())
+                        setUserEmailAddress(userMail)
+                }
                 .setSmartPlug(settings)
                 .build()
 
@@ -41,6 +55,13 @@ class MainActivity : AppCompatActivity() {
                 else
                     View.GONE
             }
+        }
+
+        useUser.setOnCheckedChangeListener { _, isChecked ->
+            name.isEnabled = isChecked
+            email.isEnabled = isChecked
+            name.isActivated = isChecked
+            email.isActivated = isChecked
         }
 
         btnLiveChat.setOnClickListener {

@@ -12,16 +12,15 @@ import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewMod
 
 class CrMenuButtonViewHolder(
     private val binding: ItemCrMenuButtonBinding,
-    onClick: (Int?, Int, String) -> Unit
-) :
-    BaseCannedResponseViewHolder(binding.root, onClick) {
+    onClick: OnCannedViewHolderClickListener
+) : BaseCannedResponseViewHolder(binding.root, onClick) {
 
     companion object {
         const val HOME = "canned-home"
         const val SURVEY = "canned-survey"
         const val CONNECT = "canned-connect"
 
-        fun create(parent: ViewGroup, onClick: (Int?, Int, String) -> Unit) =
+        fun create(parent: ViewGroup, onClick: OnCannedViewHolderClickListener) =
             CrMenuButtonViewHolder(
                 ItemCrMenuButtonBinding.inflate(
                     LayoutInflater.from(parent.context),

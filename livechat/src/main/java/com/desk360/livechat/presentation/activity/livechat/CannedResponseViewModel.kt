@@ -77,6 +77,7 @@ class CannedResponseViewModel : BaseViewModel() {
     fun clearBindEntity() = bindEntity.clear()
 
     fun startCannedResponse() {
+        CannedResponseHelper.clearPayloadLog()
         CannedResponseHelper.modelInitiate()
         cannedResponseModel
             .find { it.isStart == 1 }
@@ -201,8 +202,9 @@ class CannedResponseViewModel : BaseViewModel() {
     }
 
     fun writeActionMessage(actionId: Int?, id: Int?, type: String) {
-        if (type == ACTIONABLE_TYPE_PATH && actionId != null && id != null) {
+        if (id != null)
             CannedResponseHelper.addPayloadLog(id)
+        if (type == ACTIONABLE_TYPE_PATH && actionId != null && id != null) {
             CannedResponseHelper.getButton(id)?.content?.let { content ->
                 val message = CannedActionType.CRMessage(null, content, true)
                 bindEntity.add(message)

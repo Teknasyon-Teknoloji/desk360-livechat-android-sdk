@@ -10,12 +10,11 @@ import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewMod
 
 class CrSurveyViewHolder(
     private val binding: ItemCrSurveyBinding,
-    onClick: (Int?, Int, String) -> Unit
-) :
-    BaseCannedResponseViewHolder(binding.root, onClick) {
+    onClick: OnCannedViewHolderClickListener
+) : BaseCannedResponseViewHolder(binding.root, onClick) {
 
     companion object {
-        fun create(parent: ViewGroup, onClick: (Int?, Int, String) -> Unit) = CrSurveyViewHolder(
+        fun create(parent: ViewGroup, onClick: OnCannedViewHolderClickListener) = CrSurveyViewHolder(
             ItemCrSurveyBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

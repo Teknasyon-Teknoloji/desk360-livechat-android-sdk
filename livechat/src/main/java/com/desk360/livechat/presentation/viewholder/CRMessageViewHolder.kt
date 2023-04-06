@@ -15,11 +15,11 @@ import com.desk360.livechat.presentation.activity.livechat.CannedResponseViewMod
 
 class CRMessageViewHolder(
     private val binding: ItemCrMessageBinding,
-    onClick: (Int?, Int, String) -> Unit
+    onClick: OnCannedViewHolderClickListener
 ) : BaseCannedResponseViewHolder(binding.root, onClick) {
 
     companion object {
-        fun create(parent: ViewGroup, onClick: (Int?, Int, String) -> Unit) = CRMessageViewHolder(
+        fun create(parent: ViewGroup, onClick: OnCannedViewHolderClickListener) = CRMessageViewHolder(
             ItemCrMessageBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,

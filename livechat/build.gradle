@@ -7,7 +7,7 @@ plugins {
 
 def artifactId = 'desk360-livechat-android-sdk'
 def groupId = 'com.github.Teknasyon-Teknoloji'
-def versionN = "1.2.3"
+def versionN = "1.2.4"
 
 android {
     namespace 'com.desk360.livechat'

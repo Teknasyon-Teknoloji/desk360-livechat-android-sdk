@@ -65,19 +65,22 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         binding.imageViewSendMessage.setOnClickListener {
             val name =
                 SharedPreferencesManager.instance?.read(SharedPreferencesManager.USER_NAME, "")
+            val message = binding.editTextMessage.text?.toString()?.trim()
 
-            if (name?.isNotEmpty() == true) {
-                val message = binding.editTextMessage.text?.toString()?.trim()
-                if (!message.isNullOrEmpty() && viewModel.isSending.value == false && viewModel.hasConnection.value == true) {
-                    viewModel.isSending.value = true
-                    if (LiveChatHelper.settings?.data?.chatbot == true) {
-                        viewModel.sendChatbotMessage(message)
-                    } else
-                        viewModel.sendMessage(name, message)
+            if (
+                !name.isNullOrBlank()
+                && !message.isNullOrBlank()
+                && viewModel.isSending.value == false
+                && viewModel.hasConnection.value == true
+            ) {
+                viewModel.isSending.value = true
+                if (LiveChatHelper.settings?.data?.chatbot == true) {
+                    viewModel.sendChatbotMessage(message)
+                } else
+                    viewModel.sendMessage(name, message)
 
-                    binding.editTextMessage.setText("")
-                    viewModel.isSending.value = false
-                }
+                binding.editTextMessage.setText("")
+                viewModel.isSending.value = false
             }
         }
 
