@@ -10,11 +10,7 @@ import com.desk360.livechat.domain.usecase.ChatBotSessionUseCase
 import com.desk360.livechat.domain.usecase.GetSessionUseCase
 import com.desk360.livechat.domain.usecase.IsOfflineUseCase
 import com.desk360.livechat.domain.usecase.SendOfflineMessageUseCase
-import com.desk360.livechat.manager.Desk360LiveChat
-import com.desk360.livechat.manager.LiveChatFirebaseHelper
-import com.desk360.livechat.manager.LiveChatHelper
-import com.desk360.livechat.manager.LiveChatSharedPrefManager
-import com.desk360.livechat.manager.CannedResponseHelper
+import com.desk360.livechat.manager.*
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 
 class LoginNewChatViewModel : BaseViewModel() {
@@ -81,8 +77,8 @@ class LoginNewChatViewModel : BaseViewModel() {
         when {
             isOffline.value == true -> sendMessage(activeCustomField)
             LiveChatHelper.settings?.data?.chatbot == true -> createChatbotSession()
-            else -> if (isPathId) autoLogin(CannedResponseHelper.getPathId(), session.value)
-            else autoLogin(null, session.value)
+            isPathId -> autoLogin(CannedResponseHelper.getPathId(), session.value)
+            else -> autoLogin(null, session.value)
         }
     }
 

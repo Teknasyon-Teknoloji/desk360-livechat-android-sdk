@@ -1,5 +1,6 @@
 package com.desk360.livechat.presentation.activity.livechat
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.util.ChatUtils
@@ -11,11 +12,9 @@ import com.desk360.livechat.manager.LiveChatSharedPrefManager
 import com.desk360.livechat.presentation.viewmodel.BaseViewModel
 
 class StartNewChatViewModel : BaseViewModel() {
-    val isNeedNewToken: MutableLiveData<Boolean> by lazy {
-        MutableLiveData(
-            LiveChatSharedPrefManager.isNeedNewToken()
-        )
-    }
+    private val _isNeedNewToken = MutableLiveData(LiveChatSharedPrefManager.isNeedNewToken())
+    val isNeedNewToken: LiveData<Boolean>
+        get() = _isNeedNewToken
 
     val companyName: MutableLiveData<String> by lazy {
         MutableLiveData(Utils.getBrandName())
@@ -25,9 +24,9 @@ class StartNewChatViewModel : BaseViewModel() {
         MutableLiveData(Utils.getBrandLogo())
     }
 
-    val conversations: MutableLiveData<List<HeaderChatScreenModel>> by lazy {
-        MutableLiveData()
-    }
+    private val _conversations = MutableLiveData<List<HeaderChatScreenModel>>()
+    val conversations: LiveData<List<HeaderChatScreenModel>>
+        get() = _conversations
 
     init {
         getDatas()
@@ -45,24 +44,25 @@ class StartNewChatViewModel : BaseViewModel() {
                 ChatUtils.Conversation.CHAT_BOT
             )
         ).execute(onSuccess = {
-            if (!LiveChatSharedPrefManager.isNeedNewToken()) {
-                conversations.value = it
+            if(LiveChatSharedPrefManager.isNeedNewToken() || it.isEmpty()){
+                _isNeedNewToken.value = true
+            } else {
+                _conversations.value = it
             }
-            isNeedNewToken.value = it.isEmpty()
         }, onError = {
 
         })
     }
 
     private fun getAgent() {
-        isNeedNewToken.value = LiveChatSharedPrefManager.isNeedNewToken()
+        _isNeedNewToken.value = LiveChatSharedPrefManager.isNeedNewToken()
         if (isNeedNewToken.value == true)
             return
 
         if (LiveChatFirebaseHelper.userId.isNullOrEmpty()) {
             SharedPreferencesManager.token?.let { token ->
-                SignInWithTokenUseCase.execute(token).addOnCompleteListener { task ->
-                    LiveChatFirebaseHelper.auth?.currentUser?.uid?.let { uid ->
+                SignInWithTokenUseCase.execute(token).addOnCompleteListener {
+                    LiveChatFirebaseHelper.auth?.currentUser?.uid?.let {
                         getSession()
                     }
                 }
@@ -75,7 +75,7 @@ class StartNewChatViewModel : BaseViewModel() {
     private fun getSession() {
         GetSessionUseCase().execute({ result ->
             if (result == null) {
-                isNeedNewToken.value = true
+                _isNeedNewToken.value = true
                 DeleteConversationUseCase().execute(onSuccess = {
 
                 }, onError = {

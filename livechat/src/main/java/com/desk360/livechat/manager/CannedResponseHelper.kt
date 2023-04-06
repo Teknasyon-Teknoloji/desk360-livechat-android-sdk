@@ -7,11 +7,12 @@ import com.desk360.livechat.data.model.cannedresponse.response.CannedResponseBut
 import com.desk360.livechat.data.model.cannedresponse.response.CannedResponseCloseMenu
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 object CannedResponseHelper {
 
-    val cannedResponseModel = LiveChatHelper.settings?.data?.cannedResponse
+    val cannedResponseModel: List<CannedResponse>
+        get() = LiveChatHelper.settings?.data?.cannedResponse ?: listOf()
+
     var payloadLogData: ArrayList<CannedPayloadModel> = arrayListOf()
 
     fun getPathId(): Int? = getButton(payloadLogData[payloadLogData.size - 1].id)?.actionableId
@@ -28,7 +29,7 @@ object CannedResponseHelper {
     }
 
     private fun setCloseMenuButton() {
-        cannedResponseModel?.forEach {
+        cannedResponseModel.forEach {
             it.groupedUnits?.closeMenuButton?.forEach { i ->
                 cannedResponseMenuButton.add(i)
             }
@@ -36,7 +37,7 @@ object CannedResponseHelper {
     }
 
     private fun setReplyButtons() {
-        cannedResponseModel?.forEach {
+        cannedResponseModel.forEach {
             it.groupedUnits?.button?.forEach { i ->
                 cannedReplyButtons.add(i)
             }
@@ -44,21 +45,18 @@ object CannedResponseHelper {
     }
 
     private fun setSurvey() {
-        cannedResponseModel?.forEach {
-            if (it.actionableType == "Close_and_survey") cannedResponseSurvey = it
+        cannedResponseModel.forEach {
+            if (it.actionableType == "Close_and_survey")
+                cannedResponseSurvey = it
         }
     }
 
     fun getButton(id: Int): CannedResponseButton? {
-        cannedReplyButtons.find { it.id == id }?.let { data ->
-            return data
-        } ?: return null
+        return cannedReplyButtons.find { it.id == id }
     }
 
     fun getMenuButton(type: String): CannedResponseCloseMenu? {
-        cannedResponseMenuButton.find { it.actionableType == type }?.let { data ->
-            return data
-        } ?: return null
+        return cannedResponseMenuButton.find { it.actionableType == type }
     }
 
     fun getTime(): String {
@@ -68,5 +66,9 @@ object CannedResponseHelper {
 
     fun addPayloadLog(id: Int) {
         payloadLogData.add(CannedPayloadModel(id, DateUtils.now()))
+    }
+
+    fun clearPayloadLog(){
+        payloadLogData.clear()
     }
 }

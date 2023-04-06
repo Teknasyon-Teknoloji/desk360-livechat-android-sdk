@@ -88,9 +88,7 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
         binding.lifecycleOwner = this
         viewModel.registerLifecycle(lifecycle)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = LiveChatHelper.getStatusColor()
-        }
+        window.statusBarColor = LiveChatHelper.getStatusColor()
 
         registerReceivers()
         initUI()
