@@ -16,5 +16,6 @@ data class Data(
     @SerializedName("language") val language: Language? = null,
     @SerializedName("triggers") val triggers: List<Trigger>? = null,
     @SerializedName("canned_response") val cannedResponse: ArrayList<CannedResponse>? = null,
-    @SerializedName("is_active_canned_response") val isCannedResponse: Boolean? = null
+    @SerializedName("is_active_canned_response") val isCannedResponse: Boolean? = null,
+    @SerializedName("application_id") val applicationId: Int? = null
 )

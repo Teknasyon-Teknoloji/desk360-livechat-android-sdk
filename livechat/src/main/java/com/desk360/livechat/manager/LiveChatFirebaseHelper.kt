@@ -38,7 +38,7 @@ object LiveChatFirebaseHelper {
     val userId: String?
         get() = auth?.uid
 
-    fun isOffline(companyId: Int) = database?.getReference("count/$companyId/online")
+    fun isOffline(companyId: Int,applicationId: Int) = database?.getReference("count/$companyId/$applicationId/online")
 
     fun signOut() {
         auth?.signOut()
