@@ -42,6 +42,7 @@ To integrate Desk360 Live Chat into your Android project , add below parts to yo
 allprojects {
 	repositories {
 		...
+        mavenCentral()
 		maven { url 'https://jitpack.io' }
 	}
 }
@@ -58,7 +59,7 @@ Add the dependency
 
 ```groovy
 dependencies {
-        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.2.4'
+        implementation 'com.github.Teknasyon-Teknoloji:desk360-livechat-android-sdk:1.2.6'
 }
 ```
 

@@ -7,7 +7,7 @@ plugins {
 
 def artifactId = 'desk360-livechat-android-sdk'
 def groupId = 'com.github.Teknasyon-Teknoloji'
-def versionN = "1.2.4"
+def versionN = "1.2.5"
 
 android {
     namespace 'com.desk360.livechat'
@@ -96,7 +96,7 @@ dependencies {
     api 'com.vanniktech:emoji-google:0.7.0'
 
     // balloon
-    api "com.github.skydoves:balloon:1.3.6"
+    api "com.github.skydoves:balloon:1.5.4"
 
     def room_version = "2.4.3"
     api "androidx.room:room-runtime:$room_version"
