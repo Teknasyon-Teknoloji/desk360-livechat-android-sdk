@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.5 (2023-07-26)
+- Update livechat dependency
+
 ## 1.2.4 (2022-04-06)
 - Fix new chat card not visible on certain conditions
 
