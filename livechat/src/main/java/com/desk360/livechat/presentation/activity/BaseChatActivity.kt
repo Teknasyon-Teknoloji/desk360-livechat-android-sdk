@@ -16,7 +16,6 @@ import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.desk360.base.domain.usecase.AutoLoginTasksImpl
 import com.desk360.base.manager.SharedPreferencesManager
 import com.desk360.base.presentation.popup.ChatPopup
 import com.desk360.base.util.Utils
@@ -27,8 +26,13 @@ import com.desk360.livechat.manager.LiveChatHelper
 import com.desk360.livechat.presentation.activity.livechat.ChatViewModel
 import com.desk360.livechat.presentation.adapter.MessageListAdapter
 import com.vanniktech.emoji.EmojiPopup
-import java.io.*
-import java.util.*
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewModel>() {
     companion object {
@@ -38,9 +42,19 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
 
         const val EXTRA_CONVERSATION_ID = "extra_conversation_id"
 
-        val permissionsStorage = arrayOf(
+        private val permissionsStorage = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
+
+        val imagePermission = if (Build.VERSION.SDK_INT >= 33)
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        else
+            permissionsStorage
+
+        val videoPermission = if (Build.VERSION.SDK_INT >= 33)
+            arrayOf(Manifest.permission.READ_MEDIA_VIDEO)
+        else
+            permissionsStorage
     }
 
     private var emojiPopup: EmojiPopup? = null
@@ -149,8 +163,8 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         val applicationId = LiveChatHelper.settings?.data?.applicationId
         val companyId = LiveChatHelper.settings?.data?.companyId
 
-        if(companyId!=null && applicationId!=null){
-            viewModel.checkStatus(companyId,applicationId)
+        if (companyId != null && applicationId != null) {
+            viewModel.checkStatus(companyId, applicationId)
         }
         viewModel.newMessages.observe(this, { messages ->
             messageListAdapter?.submitList(messages)
@@ -209,63 +223,47 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     }
 
     private fun openGalleryForDocument() {
-        if (permissionsAvailable(permissionsStorage)) {
+        val mimeTypes = arrayOf(
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  // .doc & .docx
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",  // .ppt & .pptx
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  // .xls & .xlsx
+            "application/pdf"
+        )
 
-            val mimeTypes = arrayOf(
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  // .doc & .docx
-                "application/vnd.ms-powerpoint",
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation",  // .ppt & .pptx
-                "application/vnd.ms-excel",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  // .xls & .xlsx
-                "application/pdf"
-            )
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
 
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
+        if (mimeTypes.isNotEmpty()) {
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
-                if (mimeTypes.isNotEmpty()) {
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-                }
-            } else {
-                var mimeTypesStr = ""
-                for (mimeType in mimeTypes) {
-                    mimeTypesStr += "$mimeType|"
-                }
-                intent.type = mimeTypesStr.substring(0, mimeTypesStr.length - 1)
-            }
-
-            activityLauncher.launch(
-                Intent.createChooser(
-                    intent,
-                    LiveChatHelper.settings?.data?.language?.sdkChooseDocument
-                ),
-                object : BaseActivityResult.OnActivityResult<ActivityResult> {
-                    override fun onActivityResult(result: ActivityResult) {
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            result.data?.data?.also { pathUri ->
-                                dumpImageMetaData(
-                                    pathUri,
-                                    FileManager.APPLICATION_TYPE,
-                                    FileManager.MediaType.FILES,
-                                )
-                            }
+        activityLauncher.launch(
+            Intent.createChooser(
+                intent,
+                LiveChatHelper.settings?.data?.language?.sdkChooseDocument
+            ),
+            object : BaseActivityResult.OnActivityResult<ActivityResult> {
+                override fun onActivityResult(result: ActivityResult) {
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        result.data?.data?.also { pathUri ->
+                            dumpImageMetaData(
+                                pathUri,
+                                FileManager.APPLICATION_TYPE,
+                                FileManager.MediaType.FILES,
+                            )
                         }
                     }
-                })
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsStorage,
-                PERMISSION_DOCUMENT_REQUEST_CODE
-            )
-        }
+                }
+            }
+        )
     }
 
     private fun openGalleryForVideo() {
-        if (permissionsAvailable(permissionsStorage)) {
+        if (permissionsAvailable(videoPermission)) {
             activityLauncher.launch(
                 FileManager.createIntentForVideos(),
                 object : BaseActivityResult.OnActivityResult<ActivityResult> {
@@ -284,14 +282,14 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         } else {
             ActivityCompat.requestPermissions(
                 this,
-                permissionsStorage,
+                videoPermission,
                 PERMISSION_VIDEO_REQUEST_CODE
             )
         }
     }
 
     private fun openGalleryForImage() {
-        if (permissionsAvailable(permissionsStorage)) {
+        if (permissionsAvailable(imagePermission)) {
             activityLauncher.launch(
                 FileManager.createIntentForImages(),
                 object : BaseActivityResult.OnActivityResult<ActivityResult> {
@@ -310,7 +308,7 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         } else {
             ActivityCompat.requestPermissions(
                 this,
-                permissionsStorage,
+                imagePermission,
                 PERMISSION_IMAGE_REQUEST_CODE
             )
         }
@@ -340,13 +338,15 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             PERMISSION_IMAGE_REQUEST_CODE -> {
-                if (permissionsAvailable(permissionsStorage))
+                if (permissionsAvailable(imagePermission))
                     openGalleryForImage()
             }
+
             PERMISSION_VIDEO_REQUEST_CODE -> {
-                if (permissionsAvailable(permissionsStorage))
+                if (permissionsAvailable(videoPermission))
                     openGalleryForVideo()
             }
+
             PERMISSION_DOCUMENT_REQUEST_CODE -> {
                 if (permissionsAvailable(permissionsStorage))
                     openGalleryForDocument()
