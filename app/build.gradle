@@ -7,13 +7,12 @@ plugins {
 android {
     namespace 'com.desk360.android_live_chat_sdk'
 
-    compileSdkVersion 33
-    buildToolsVersion "33.0.0"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.desk360.android_live_chat_example"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk 21
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

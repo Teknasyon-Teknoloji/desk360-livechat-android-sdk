@@ -7,17 +7,16 @@ plugins {
 
 def artifactId = 'desk360-livechat-android-sdk'
 def groupId = 'com.github.Teknasyon-Teknoloji'
-def versionN = "1.2.5"
+def versionN = "1.2.6"
 
 android {
     namespace 'com.desk360.livechat'
 
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    compileSdk 33
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdk 21
+        targetSdk 33
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

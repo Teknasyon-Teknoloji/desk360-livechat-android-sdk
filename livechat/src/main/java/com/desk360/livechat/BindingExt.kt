@@ -5,17 +5,20 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.core.view.ViewCompat
+import androidx.core.widget.ImageViewCompat
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.desk360.base.util.ChatUtils
 import com.desk360.livechat.manager.FileManager
 import com.desk360.livechat.manager.LiveChatHelper
@@ -57,10 +60,12 @@ object BindingExt {
         color?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 try {
-                    textView.compoundDrawableTintList =
+                    TextViewCompat.setCompoundDrawableTintList(
+                        textView,
                         ColorStateList.valueOf(Color.parseColor(color))
+                    )
                 } catch (ex: Exception) {
-
+                    Log.e("bind:drawableTint", ex.message, ex)
                 }
             }
         }
@@ -70,12 +75,13 @@ object BindingExt {
     @BindingAdapter("bind:tint")
     fun setTint(imageView: ImageView, color: String?) {
         color?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    imageView.imageTintList = ColorStateList.valueOf(Color.parseColor(color))
-                } catch (ex: Exception) {
-
-                }
+            try {
+                ImageViewCompat.setImageTintList(
+                    imageView,
+                    ColorStateList.valueOf(Color.parseColor(color))
+                )
+            } catch (ex: Exception) {
+                Log.e("bind:tint", ex.message, ex)
             }
         }
     }
@@ -83,9 +89,10 @@ object BindingExt {
     @JvmStatic
     @BindingAdapter("bind:backgroundTint")
     fun setBackgroundTint(view: View, color: String?) {
-        if (!color.isNullOrEmpty() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view.backgroundTintList = ColorStateList.valueOf(Color.parseColor(color))
-        }
+        if (color.isNullOrEmpty())
+            return
+
+        ViewCompat.setBackgroundTintList(view, ColorStateList.valueOf(Color.parseColor(color)))
     }
 
     @JvmStatic
@@ -216,10 +223,8 @@ object BindingExt {
     fun setProgressTint(progressBar: ProgressBar, color: String?) {
         color?.let {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    progressBar.progressTintList =
-                        ColorStateList.valueOf(Color.parseColor(color))
-                }
+                progressBar.progressTintList =
+                    ColorStateList.valueOf(Color.parseColor(color))
             } catch (ex: Exception) {
 
             }
@@ -235,6 +240,7 @@ object BindingExt {
                 layoutParams.setMargins(30, 0, 0, 0)
 
             }
+
             else -> {
                 layoutParams.setMargins(0, 0, 30, 0)
             }
