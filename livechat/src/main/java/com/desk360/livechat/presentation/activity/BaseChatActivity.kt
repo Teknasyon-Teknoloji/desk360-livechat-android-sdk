@@ -1,11 +1,9 @@
 package com.desk360.livechat.presentation.activity
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.OpenableColumns
 import android.text.Editable
@@ -13,7 +11,8 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.result.ActivityResult
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.desk360.base.manager.SharedPreferencesManager
@@ -36,25 +35,7 @@ import java.io.OutputStream
 
 abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewModel>() {
     companion object {
-        const val PERMISSION_IMAGE_REQUEST_CODE = 111
-        const val PERMISSION_VIDEO_REQUEST_CODE = 222
-        const val PERMISSION_DOCUMENT_REQUEST_CODE = 333
-
         const val EXTRA_CONVERSATION_ID = "extra_conversation_id"
-
-        private val permissionsStorage = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-
-        val imagePermission = if (Build.VERSION.SDK_INT >= 33)
-            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
-        else
-            permissionsStorage
-
-        val videoPermission = if (Build.VERSION.SDK_INT >= 33)
-            arrayOf(Manifest.permission.READ_MEDIA_VIDEO)
-        else
-            permissionsStorage
     }
 
     private var emojiPopup: EmojiPopup? = null
@@ -64,6 +45,17 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
     override fun getLayoutResId() = R.layout.activity_chat
 
     override fun getViewModelClass() = ChatViewModel::class.java
+
+    private val pickImage = registerForActivityResult(PickVisualMedia()) { uri ->
+        if (uri != null) {
+            dumpImageMetaData(uri, FileManager.IMAGE_TYPE, FileManager.MediaType.IMAGES)
+        }
+    }
+    private val pickVideo = registerForActivityResult(PickVisualMedia()) { uri ->
+        if (uri != null) {
+            dumpImageMetaData(uri, FileManager.VIDEO_TYPE, FileManager.MediaType.VIDEOS)
+        }
+    }
 
     override fun initUI() {
         binding.viewModel = viewModel
@@ -210,11 +202,11 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         }
 
         binding.textViewAttachmentGallery.setOnClickListener {
-            openGalleryForImage()
+            pickImage.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
         }
 
         binding.textViewAttachmentVideo.setOnClickListener {
-            openGalleryForVideo()
+            pickVideo.launch(PickVisualMediaRequest(PickVisualMedia.VideoOnly))
         }
 
         binding.textViewAttachmentDocument.setOnClickListener {
@@ -233,7 +225,7 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
             "application/pdf"
         )
 
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
 
         intent.type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
@@ -262,58 +254,6 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         )
     }
 
-    private fun openGalleryForVideo() {
-        if (permissionsAvailable(videoPermission)) {
-            activityLauncher.launch(
-                FileManager.createIntentForVideos(),
-                object : BaseActivityResult.OnActivityResult<ActivityResult> {
-                    override fun onActivityResult(result: ActivityResult) {
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            result.data?.data?.also { pathUri ->
-                                dumpImageMetaData(
-                                    pathUri,
-                                    FileManager.VIDEO_TYPE,
-                                    FileManager.MediaType.VIDEOS
-                                )
-                            }
-                        }
-                    }
-                })
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                videoPermission,
-                PERMISSION_VIDEO_REQUEST_CODE
-            )
-        }
-    }
-
-    private fun openGalleryForImage() {
-        if (permissionsAvailable(imagePermission)) {
-            activityLauncher.launch(
-                FileManager.createIntentForImages(),
-                object : BaseActivityResult.OnActivityResult<ActivityResult> {
-                    override fun onActivityResult(result: ActivityResult) {
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            result.data?.data?.also { pathUri ->
-                                dumpImageMetaData(
-                                    pathUri,
-                                    FileManager.IMAGE_TYPE,
-                                    FileManager.MediaType.IMAGES
-                                )
-                            }
-                        }
-                    }
-                })
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                imagePermission,
-                PERMISSION_IMAGE_REQUEST_CODE
-            )
-        }
-    }
-
     private fun createEmojiPopup() {
         emojiPopup =
             EmojiPopup.Builder.fromRootView(binding.layoutRoot).setOnEmojiPopupShownListener {
@@ -330,30 +270,6 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            PERMISSION_IMAGE_REQUEST_CODE -> {
-                if (permissionsAvailable(imagePermission))
-                    openGalleryForImage()
-            }
-
-            PERMISSION_VIDEO_REQUEST_CODE -> {
-                if (permissionsAvailable(videoPermission))
-                    openGalleryForVideo()
-            }
-
-            PERMISSION_DOCUMENT_REQUEST_CODE -> {
-                if (permissionsAvailable(permissionsStorage))
-                    openGalleryForDocument()
-            }
-        }
-    }
-
     private fun dumpImageMetaData(uri: Uri, fileType: String, mediaType: String) {
         val contentResolver = applicationContext.contentResolver
         val cursor: Cursor? = contentResolver.query(
@@ -362,7 +278,11 @@ abstract class BaseChatActivity : BaseActivity<ActivityChatBinding, ChatViewMode
 
         cursor?.use {
             if (it.moveToFirst()) {
-                val displayName = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val displayName = if (nameIndex != -1)
+                    it.getString(nameIndex)
+                else
+                    "image.png"
                 val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
 
                 if (!it.isNull(sizeIndex)) {
